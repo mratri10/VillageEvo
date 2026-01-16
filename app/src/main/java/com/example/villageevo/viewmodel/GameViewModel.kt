@@ -32,6 +32,11 @@ class GameViewModel (initialCity: CityState): ViewModel() {
     fun invest(amount:Int){
         _cityState.value = MarketEngine.invest(_cityState.value, amount)
     }
-    fun openMarket(){}
-    fun openWorkers(){}
+    fun openMarket(){
+    //        TODO("Not yet implemented")
+    }
+    fun openWorkers(){
+    //    TODO("Not yet implemented")
+
+    }
 }

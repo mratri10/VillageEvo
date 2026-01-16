@@ -3,19 +3,16 @@ package com.example.villageevo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.villageevo.ui.screens.main.VillageScreen
-import com.example.villageevo.ui.theme.VillageEvoTheme
-import com.example.villageevo.viewmodel.VillageViewModel
+import androidx.activity.viewModels
+import com.example.villageevo.ui.screens.MainCityScreen
+import com.example.villageevo.viewmodel.GameViewModel
 
 class MainActivity : ComponentActivity() {
+    private val viewModel: GameViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            VillageEvoTheme {
-                val vm: VillageViewModel = viewModel()
-                VillageScreen(vm)
-            }
+            MainCityScreen(viewModel)
         }
     }
 }
