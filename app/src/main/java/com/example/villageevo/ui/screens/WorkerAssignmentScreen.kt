@@ -64,7 +64,7 @@ fun WorkerRow(worker: Worker) {
         }
 
         DropdownMenu (expanded, onDismissRequest = { expanded = false }) {
-            WorkerType.values().forEach {
+            WorkerType.entries.forEach {
                 DropdownMenuItem(
                     text = { Text(it.name) },
                     onClick = {

@@ -1,7 +1,7 @@
 package com.example.villageevo.domain.city
 
 data class Resources(
-    var gold: Int = 0,
-    var lumber: Int = 0,
-    var food: Int = 0,
+        var gold: Long = 0,
+        var lumber: Long = 0,
+        var food: Long = 0,
 )

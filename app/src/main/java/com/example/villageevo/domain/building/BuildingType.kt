@@ -9,5 +9,6 @@ enum class BuildingType {
     MINE,
     POWER_PLANT,
     FACTORY,
-    HOSPITAL
+    HOSPITAL,
+    LUMBER_MILL
 }
