@@ -26,10 +26,12 @@ import com.example.villageevo.viewmodel.GameViewModel
 fun MainCityScreen(viewModel: GameViewModel){
     val cityState by viewModel.cityState.collectAsState()
 
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF111111))
+            .padding(12.dp)
     ) {
         ResourceScreen(cityState)
         Row(modifier = Modifier

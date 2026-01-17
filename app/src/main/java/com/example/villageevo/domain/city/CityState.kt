@@ -1,6 +1,6 @@
 package com.example.villageevo.domain.city
 
-import com.example.villageevo.data.model.BuildingType
+import com.example.villageevo.domain.building.BuildingType
 import com.example.villageevo.domain.country.CountryProfile
 import com.example.villageevo.domain.era.Era
 import com.example.villageevo.domain.market.MarketLevel
@@ -14,8 +14,9 @@ data class CityState(
     val population: Int,
     val availableWorkers:Int,
     val buildings: Map<BuildingType, Int>,
-    val marketLevel: MarketLevel,
-    val investedGold: Int,
+    var marketLevel: MarketLevel,
+    var investedGold: Int,
     val happiness: Float = 1.0f,
-    val technologyLevel:Int = 0
+    val technologyLevel:Int = 0,
+    val schoolLevel: Int = 0
 )

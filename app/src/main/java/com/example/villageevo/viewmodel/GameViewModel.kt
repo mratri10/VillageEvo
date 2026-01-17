@@ -1,42 +1,89 @@
 package com.example.villageevo.viewmodel
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.villageevo.domain.building.BuildingRepository
+import com.example.villageevo.domain.building.BuildingType
 import com.example.villageevo.domain.city.CityState
-import com.example.villageevo.domain.economy.BaseEconomyData
-import com.example.villageevo.domain.economy.MarketEngine
 import com.example.villageevo.domain.turn.TurnManager
+import com.example.villageevo.domain.worker.Worker
 import com.example.villageevo.domain.worker.WorkerAssignment
+import com.example.villageevo.domain.worker.WorkerEducation
+import com.example.villageevo.domain.worker.WorkerRole
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-class GameViewModel (initialCity: CityState): ViewModel() {
+enum class Screen {
+    CITY,
+    MARKET,
+    WORKERS
+}
+
+class GameViewModel(initialCity: CityState) : ViewModel() {
+
     private val _cityState = MutableStateFlow(initialCity)
-    val cityState: StateFlow<CityState> = _cityState
+    val cityState: StateFlow<CityState> = _cityState.asStateFlow()
 
-    private var assignments:List<WorkerAssignment> = emptyList()
+    private val _currentScreen = MutableStateFlow(Screen.CITY)
+    val currentScreen: StateFlow<Screen> = _currentScreen.asStateFlow()
+    private var workerAssignments: List<WorkerAssignment> = emptyList()
 
-    fun nextTurn(){
-        _cityState.value = TurnManager.nextTurn(
-            _cityState.value,
-            assignments,
-            BaseEconomyData.production,
-            BaseEconomyData.operationalCost
-        )
+    private val workers = mutableListOf<Worker>()
+    private var assignments: List<WorkerAssignment> = emptyList()
+
+    init{
+        generateInitialWorkers()
     }
 
-    fun sell(food:Int, lumber:Int){
-        _cityState.value = MarketEngine.sell(_cityState.value, food, lumber)
+    private fun generateInitialWorkers() {
+        repeat(20){
+            workers.add(
+                Worker(
+                    id = it.toString(),
+                    role = WorkerRole.GENERAL,
+                    education = WorkerEducation.NONE
+                )
+            )
+        }
     }
 
-    fun invest(amount:Int){
-        _cityState.value = MarketEngine.invest(_cityState.value, amount)
+    fun nextTurn() {
+        val newState = TurnManager.nextTurn(_cityState.value, workerAssignments)
+        _cityState.value = newState
     }
-    fun openMarket(){
-    //        TODO("Not yet implemented")
-    }
-    fun openWorkers(){
-    //    TODO("Not yet implemented")
 
+    fun buyBuilding(type: BuildingType){
+        val current = _cityState.value
+        val definition = BuildingRepository.getDefinition(type)
+
+        if(current.resources.gold >= definition.buildCostGold && current.resources.lumber >= definition.buildCostLumber){
+            val newResource = current.resources.copy(
+                gold = current.resources.gold - definition.buildCostGold,
+                lumber = current.resources.lumber - definition.buildCostLumber
+            )
+            val currentCount = current.buildings[type] ?: 0
+            val newBuildings = current.buildings.toMutableMap().apply {
+                put(type, currentCount+1)
+            }
+
+            _cityState.value = current.copy(
+                resources = newResource,
+                buildings = newBuildings
+            )
+        }
+    }
+
+    fun openMarket() {
+        _currentScreen.value = Screen.MARKET
+    }
+    fun openWorkers() {
+        _currentScreen.value = Screen.WORKERS
+    }
+    fun backToCity() {
+        _currentScreen.value = Screen.CITY
+    }
+
+    private fun refreshState(){
+        _cityState.value = _cityState.value.copy()
     }
 }

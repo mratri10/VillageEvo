@@ -24,8 +24,6 @@ fun ResourceScreen(city: CityState) {
             Text("Gold: ${city.resources.gold}")
             Text("Lumber: ${city.resources.lumber}")
             Text("Food: ${city.resources.food}")
-            Text("Energy: ${city.resources.energy}")
-            Text("Population: ${city.population}")
             Text("Turn: ${city.turnState.currentTurn}/${city.turnState.maxTurn}")
 
     }

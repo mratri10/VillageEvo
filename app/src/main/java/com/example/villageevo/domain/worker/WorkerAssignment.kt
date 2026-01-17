@@ -1,8 +1,8 @@
 package com.example.villageevo.domain.worker
 
-import com.example.villageevo.data.model.BuildingType
+import com.example.villageevo.domain.building.BuildingType
 
 data class WorkerAssignment(
-    val buildingType: BuildingType,
-    val workers: List<Worker>
+    val building: BuildingType,
+    val workerCount: Int=0
 )

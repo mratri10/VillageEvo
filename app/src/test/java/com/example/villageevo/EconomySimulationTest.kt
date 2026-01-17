@@ -1,6 +1,5 @@
 package com.example.villageevo
 
-import com.example.villageevo.data.model.BuildingType
 import com.example.villageevo.domain.city.CityState
 import com.example.villageevo.domain.city.CountryRepository
 import com.example.villageevo.domain.city.Resources

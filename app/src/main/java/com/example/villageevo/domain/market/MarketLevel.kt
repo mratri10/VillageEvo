@@ -6,5 +6,11 @@ enum class MarketLevel (
 ){
     LEVEL_1(0.04f, 200),
     LEVEL_2(0.07f, 400),
-    LEVEL_3(0.10f, 800),
+    LEVEL_3(0.10f, 800);
+
+    fun next(): MarketLevel = when(this){
+        LEVEL_1 -> LEVEL_2
+        LEVEL_2 -> LEVEL_3
+        LEVEL_3 -> LEVEL_3
+    }
 }

@@ -16,8 +16,6 @@ object SimulationEngine {
             currentCity = TurnManager.nextTurn(
                 currentCity,
                 assignment,
-                BaseEconomyData.production,
-                BaseEconomyData.operationalCost
             )
         }
         return currentCity
