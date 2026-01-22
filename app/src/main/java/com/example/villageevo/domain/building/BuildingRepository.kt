@@ -23,38 +23,33 @@ object BuildingRepository {
                 requiredWorkers = 3,
                 description = "Sumber makanan utama"
             )
-            BuildingType.LUMBER_MILL -> BuildingDefinition(
-                type = type,
-                name = "Lumber Mill",
-                buildCostGold = 80,
-                buildCostLumber = 20,
-                baseProduction = 10,
-                baseOperationalCost = 8,
-                requiredWorkers = 4,
-                description = "Produksi kayu utama untuk konstruksi"
-            )
-            BuildingType.MARKET -> BuildingDefinition(
-                type = type,
-                name = "Market",
-                buildCostGold = 120,
-                buildCostLumber = 30,
-                baseProduction = 0,
-                baseOperationalCost = 2,
-                requiredWorkers = 2,
-                description = "Pusat perdagangan"
-            )
-            BuildingType.SCHOOL -> BuildingDefinition(
-                type = type,
-                name = "School",
-                buildCostGold = 200,
-                buildCostLumber = 50,
-                baseProduction = 0,
-                baseOperationalCost = 5,
-                requiredWorkers = 1,
-                description = "Meningkatkan efisiensi biaya operasional."
-            )
             else -> BuildingDefinition(type, "Unknown", 9999, 9999, 0,0,0,"")
 
+        }
+    }
+
+    fun  getMapCategory(type: MapCategory): List<Coordinate>{
+        return when(type){
+            MapCategory.GRASS_FOREST -> listOf(
+                Coordinate(BuildingType.HOUSE,3,3,Building(1,5,0)),
+
+                Coordinate(BuildingType.FOREST,0,0,Building(66,0,0)),
+                Coordinate(BuildingType.FOREST,0,1,Building(126,0,0)),
+                Coordinate(BuildingType.FOREST,0,2,Building(200,0,0)),
+                Coordinate(BuildingType.FOREST,1,2,Building(29,0,0)),
+                Coordinate(BuildingType.FOREST,2,2,Building(326,0,0)),
+
+                Coordinate(BuildingType.ANIMAL,1,0,Building(260,0,0)),
+                Coordinate(BuildingType.ANIMAL,1,1,Building(25,0,0)),
+                Coordinate(BuildingType.ANIMAL,2,1,Building(106,0,0)),
+                Coordinate(BuildingType.ANIMAL,2,0,Building(80,0,0))
+            )
+            MapCategory.GRASS_SEA -> listOf(
+                Coordinate(BuildingType.HOUSE,0,0,Building(0,0,0)),
+            )
+            MapCategory.GRASS_RIVER -> listOf(
+                Coordinate(BuildingType.FOREST,0,0,Building(0,0,0))
+            )
         }
     }
 }

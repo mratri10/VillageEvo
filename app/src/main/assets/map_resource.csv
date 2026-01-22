@@ -1,0 +1,17 @@
+id,id_map,name,sum
+1,1,forest,715
+2,1,wild,716
+3,2,forest,780
+4,2,wild,1383
+5,3,forest,2040
+6,3,wild,150
+7,4,forest,0
+8,4,wild,2380
+9,5,forest,915
+10,5,wild,1260
+11,6,forest,2100
+12,6,wild,0
+13,7,forest,0
+14,7,wild,2430
+15,8,forest,1000
+16,8,wild,1260

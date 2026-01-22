@@ -1,14 +1,8 @@
 package com.example.villageevo.domain.building
 
 enum class BuildingType {
-    HOUSE,
+    HOUSE,//{}
     FARM,
-    FOREST,
-    MARKET,
-    SCHOOL,
-    MINE,
-    POWER_PLANT,
-    FACTORY,
-    HOSPITAL,
-    LUMBER_MILL
+    FOREST,//{14 x 9}
+    ANIMAL,
 }

@@ -46,7 +46,6 @@ object TurnManager {
 
             when (type) {
                 BuildingType.FARM -> producedFood += totalProduction.toLong()
-                BuildingType.LUMBER_MILL -> producedLumber += totalProduction.toLong()
                 else -> {}
             }
         }

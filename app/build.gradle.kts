@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -50,6 +51,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.foundation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -60,4 +62,20 @@ dependencies {
 
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    // Pastikan versi ini ada (minimal 1.5.0 untuk Material 3)
+    implementation("com.google.android.material:material:1.11.0")
+
+    // Untuk Compose Material 3
+    implementation("androidx.compose.material3:material3")
+    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.9.2")
+
+    val roomVersion = "2.6.1"
+    // Library utama Room
+    implementation("androidx.room:room-runtime:$roomVersion")
+    // Support untuk Kotlin Coroutines & Flow (Sangat penting untuk MVVM)
+    implementation("androidx.room:room-ktx:$roomVersion")
+
+    // Compiler untuk memproses anotasi (Entity, Dao, dll)
+    // Compiler untuk memproses anotasi (Entity, Dao, dll)
+    ksp("androidx.room:room-compiler:$roomVersion")
 }

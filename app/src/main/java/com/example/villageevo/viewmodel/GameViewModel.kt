@@ -1,36 +1,47 @@
 package com.example.villageevo.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.villageevo.domain.building.BuildingRepository
-import com.example.villageevo.domain.building.BuildingType
+import com.example.villageevo.domain.building.Coordinate
+import com.example.villageevo.domain.building.MapCategory
 import com.example.villageevo.domain.city.CityState
 import com.example.villageevo.domain.city.Resources
 import com.example.villageevo.domain.country.CountryProfile
 import com.example.villageevo.domain.era.Era
+import com.example.villageevo.domain.map.MapMetaDataEntity
+import com.example.villageevo.domain.map.MapUserDao
 import com.example.villageevo.domain.turn.TurnManager
 import com.example.villageevo.domain.turn.TurnState
 import com.example.villageevo.domain.worker.WorkerAssignment
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 enum class Screen {
     CITY,
-    MARKET,
-    WORKERS
+    HOME
 }
 
-class GameViewModel : ViewModel() {
+class GameViewModel(private val repository: MapUserDao) : ViewModel() {
+    private val _selectedMapId = MutableStateFlow(1)
 
     private val _cityState = MutableStateFlow(createInitialCity())
     val cityState: StateFlow<CityState> = _cityState.asStateFlow()
 
-    private val _currentScreen = MutableStateFlow(Screen.CITY)
+    private val _currentScreen = MutableStateFlow(Screen.HOME)
     val currentScreen: StateFlow<Screen> = _currentScreen.asStateFlow()
 
-    init {
-        // any other init logic
-    }
+    private val _metadataList = MutableStateFlow<List<MapMetaDataEntity>>(emptyList())
+    val metadataList = _metadataList.asStateFlow()
+
+    val activeMapMetadata =
+            combine(_selectedMapId, _metadataList) { id, list -> list.find { it.id == id } }
+                    .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     private fun createInitialCity(): CityState {
         // Create a dummy/starter profile
@@ -53,44 +64,34 @@ class GameViewModel : ViewModel() {
         )
     }
 
+    fun showMap(): List<Coordinate> {
+        val listCoordinate: List<Coordinate> =
+                BuildingRepository.getMapCategory(type = MapCategory.GRASS_FOREST)
+        return listCoordinate
+    }
+
+    fun changeMap(id: Int) {
+        _selectedMapId.value = id
+    }
+
+    fun getMapData() {
+        println("++++++++++++++")
+        viewModelScope.launch { _metadataList.value = repository.getMapMetadata() }
+
+        println("+++++++++++++ ${_metadataList.value}")
+    }
+
     fun nextTurn() {
         val assignments: List<WorkerAssignment> = emptyList() // Placeholder for worker logic
 
         val newState = TurnManager.nextTurn(_cityState.value, assignments)
         _cityState.value = newState
     }
-
-    fun buyBuilding(type: BuildingType) {
-        val current = _cityState.value
-        val definition = BuildingRepository.getDefinition(type)
-
-        if (current.resources.gold >= definition.buildCostGold &&
-                        current.resources.lumber >= definition.buildCostLumber
-        ) {
-            val newResource =
-                    current.resources.copy(
-                            gold = current.resources.gold - definition.buildCostGold,
-                            lumber = current.resources.lumber - definition.buildCostLumber
-                    )
-            val currentCount = current.buildings[type] ?: 0
-            val newBuildings =
-                    current.buildings.toMutableMap().apply { put(type, currentCount + 1) }
-
-            _cityState.value = current.copy(resources = newResource, buildings = newBuildings)
-        }
-    }
-
-    fun openMarket() {
-        _currentScreen.value = Screen.MARKET
-    }
-    fun openWorkers() {
-        _currentScreen.value = Screen.WORKERS
-    }
-    fun backToCity() {
+    fun openCity() {
+        println("+++++++++++ OPEN CITY ++++++++++")
         _currentScreen.value = Screen.CITY
     }
-
-    fun getBuildingCount(type: BuildingType): Int {
-        return cityState.value.getBuildingCount(type)
+    fun openHome() {
+        _currentScreen.value = Screen.HOME
     }
 }
