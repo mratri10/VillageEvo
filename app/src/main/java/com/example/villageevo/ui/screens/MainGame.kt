@@ -95,8 +95,3 @@ fun MainGame(modifier: Modifier, viewModel: GameViewModel) {
     }
 
 }
-
-@Composable
-fun ParameterView(){
-
-}
