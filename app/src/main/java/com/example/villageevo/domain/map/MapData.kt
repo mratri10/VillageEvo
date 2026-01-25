@@ -1,6 +1,7 @@
 package com.example.villageevo.domain.map
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 data class MapMetaData (
     val id: Int,
@@ -8,19 +9,17 @@ data class MapMetaData (
     val description:String,
 )
 
-data class MapTile(
+data class MapData(
     val id:Int,
-    val idMap: String,
+    val idMap: Int,
     val name: String,
     val value: Int,
     val x: Int,
     val y: Int,
 )
-
-@Entity("map_resource")
 data class MapResource(
-    val id:Int,
-    val idMap: String,
+    val id: Int,
+    val idMap: Int,
     val name: String,
     val sum: Int,
 )

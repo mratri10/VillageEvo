@@ -1,25 +1,21 @@
-package com.example.villageevo.domain.db
+package com.example.villageevo.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.villageevo.domain.map.MapDataEntity
-import com.example.villageevo.domain.map.MapMetaDataEntity
-import com.example.villageevo.domain.map.MapResourceEntity
-import com.example.villageevo.domain.map.MapUserDao
 import com.example.villageevo.domain.map.MapUserDataEntity
 import com.example.villageevo.domain.map.MapUserMetaDataEntity
+import com.example.villageevo.domain.map.MapUserResourceEntity
 
 @Database(
         entities =
                 [
-                        MapUserMetaDataEntity::class,
-                        MapUserDataEntity::class,
-                        MapMetaDataEntity::class,
-                        MapDataEntity::class,
-                        MapResourceEntity::class],
-        version = 1,
+                    MapUserMetaDataEntity::class,
+                    MapUserDataEntity::class,
+                    MapUserResourceEntity::class
+                ],
+        version = 3,
         exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -37,7 +33,7 @@ abstract class AppDatabase : RoomDatabase() {
                                                 AppDatabase::class.java,
                                                 "village_evo_database"
                                         )
-                                        .addCallback(DatabaseSeeder(context))
+                                        .fallbackToDestructiveMigration()
                                         .build()
                         INSTANCE = instance
                         instance

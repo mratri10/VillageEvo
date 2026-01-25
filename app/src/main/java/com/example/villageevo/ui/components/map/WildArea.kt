@@ -92,8 +92,8 @@ fun WildArea(
                     .padding(5.dp)
                     .align(Alignment.CenterStart)
                     .clip(RoundedCornerShape(10.dp)),
-            verticalAlignment = Alignment.CenterVertically) {
-
+            verticalAlignment = Alignment.CenterVertically,
+            ) {
             Text("$workers",style = MaterialTheme.typography.labelSmall)
             Image(
                 painter = painterResource(id = R.drawable.farmer),
