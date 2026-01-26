@@ -6,5 +6,6 @@ import com.example.villageevo.viewmodel.MapViewModel
 
 @Composable
 fun SelectScreen(viewModel: MapViewModel) {
+
     Column() { }
 }

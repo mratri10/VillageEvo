@@ -7,38 +7,43 @@ import com.example.villageevo.domain.map.MapResource
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 
 class MapRepository(private val context: Context) {
-    private val csv = csvReader()
+    private val csvReader = csvReader()
+    private val mapData = "map_data.csv"
+    private val mapResource = "map_resource.csv"
+    private val mapMeta = "map_meta.csv"
 
-    fun getMapMetadata(): List<MapMetaData>{
-        return context.assets.open("map_metadata.csv").use { inputStream ->
-            csv.readAllWithHeader(inputStream).map {
+
+    fun getMapMetadata(): List<MapMetaData> {
+        return context.assets.open(mapMeta).use { inputStream ->
+            csvReader.readAllWithHeader(inputStream).map {
                 MapMetaData(it["id"]!!.toInt(), it["title"]!!, it["description"]!!)
             }
         }
     }
 
-    fun getMapData(): List<MapData>{
-        return context.assets.open("map_data.csv").use { inputStream ->
-            csv.readAllWithHeader(inputStream).map {
+    fun getMapData(): List<MapData> {
+        return context.assets.open(mapData).use { inputStream ->
+            csvReader.readAllWithHeader(inputStream).map {
                 MapData(
                     it["id"]!!.toInt(),
                     it["id_map"]!!.toInt(),
                     it["name"]!!,
                     it["value"]!!.toInt(),
-                    it["x"]!!.toInt(), it["y"]!!.toInt()
+                    it["x"]!!.toInt(),
+                    it["y"]!!.toInt()
                 )
             }
         }
     }
 
-    fun getMapResource(): List<MapResource>{
-        return context.assets.open("map_resource.csv").use { inputStream ->
-            csv.readAllWithHeader(inputStream).map {
+    fun getMapResource(): List<MapResource> {
+        return context.assets.open(mapResource).use { inputStream ->
+            csvReader.readAllWithHeader(inputStream).map {
                 MapResource(
-                    it["id"]!!.toInt(),
-                    it["id_map"]!!.toInt(),
-                    it["description"]!!,
-                    it["sum"]!!.toInt()
+                        it["id"]!!.toInt(),
+                        it["id_map"]!!.toInt(),
+                        it["name"]!!,
+                        it["sum"]!!.toInt()
                 )
             }
         }

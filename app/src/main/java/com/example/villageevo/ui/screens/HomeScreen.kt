@@ -1,20 +1,16 @@
 package com.example.villageevo.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,22 +21,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.villageevo.db.AppDatabase
 import com.example.villageevo.domain.map.MapData
 import com.example.villageevo.domain.map.MapMetaData
 import com.example.villageevo.domain.map.MapResource
-import com.example.villageevo.repository.MapUserRepository
 import com.example.villageevo.viewmodel.GameViewModel
 import com.example.villageevo.viewmodel.MapViewModel
 
@@ -51,9 +40,7 @@ fun HomeScreen(viewModel: GameViewModel, mapViewModel: MapViewModel) {
     val mapData by viewModel.mapData.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        print("+++++++++++ $mapData ")
         viewModel.getMapData()
-
     }
 
     Row(
@@ -71,7 +58,7 @@ fun HomeScreen(viewModel: GameViewModel, mapViewModel: MapViewModel) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(12) { index ->
-                if (index < mapData.size) {
+                if (index < mapMetaData.size) {
                     val meta = mapMetaData[index]
                     val resource:MapResource = mapResource.first { it.idMap == meta.id }
                     val data:List<MapData> =mapData.filter { it.idMap == meta.id }

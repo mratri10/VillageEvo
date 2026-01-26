@@ -2,9 +2,8 @@ package com.example.villageevo.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.villageevo.domain.building.BuildingRepository
+import com.example.villageevo.domain.building.BuildingType
 import com.example.villageevo.domain.building.Coordinate
-import com.example.villageevo.domain.building.MapCategory
 import com.example.villageevo.domain.map.MapData
 import com.example.villageevo.domain.map.MapMetaData
 import com.example.villageevo.domain.map.MapResource
@@ -32,11 +31,31 @@ class GameViewModel(private val repository: MapRepository) : ViewModel() {
     private val _mapResource = MutableStateFlow<List<MapResource>>(emptyList())
     val mapResource = _mapResource.asStateFlow()
 
+    init {
+        getMapData()
+    }
 
     fun showMap(): List<Coordinate> {
-        val listCoordinate: List<Coordinate> =
-                BuildingRepository.getMapCategory(type = MapCategory.GRASS_FOREST)
-        return listCoordinate
+        // Mapping MapData to Coordinate for UI compatibility
+        return _mapData.value.map { data ->
+            val type =
+                    try {
+                        BuildingType.valueOf(data.name.uppercase())
+                    } catch (e: IllegalArgumentException) {
+                        BuildingType.FOREST // Fallback
+                    }
+            Coordinate(
+                    buildingType = type,
+                    x = data.x,
+                    y = data.y,
+                    building =
+                            com.example.villageevo.domain.building.Building(
+                                    sum = data.value,
+                                    workers = 0,
+                                    destroy = 0
+                            )
+            )
+        }
     }
 
     fun openHome() {
@@ -44,16 +63,10 @@ class GameViewModel(private val repository: MapRepository) : ViewModel() {
     }
 
     fun getMapData() {
-        print("+++++++++++ 1 $mapData ")
-        viewModelScope.launch { _metaList.value = repository.getMapMetadata() }
+        viewModelScope.launch {
+            _metaList.value = repository.getMapMetadata()
+            _mapData.value = repository.getMapData()
+            _mapResource.value = repository.getMapResource()
+        }
     }
-
-    fun getUserData(){
-        viewModelScope.launch { _mapData.value = repository.getMapData() }
-    }
-
-    fun getUserResource(){
-        viewModelScope.launch { _mapResource.value = repository.getMapResource() }
-    }
-
 }
