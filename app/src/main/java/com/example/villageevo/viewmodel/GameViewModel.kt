@@ -7,6 +7,8 @@ import com.example.villageevo.domain.building.Coordinate
 import com.example.villageevo.domain.map.MapData
 import com.example.villageevo.domain.map.MapMetaData
 import com.example.villageevo.domain.map.MapResource
+import com.example.villageevo.domain.soldier.MapSoldier
+import com.example.villageevo.domain.soldier.Soldier
 import com.example.villageevo.repository.MapRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

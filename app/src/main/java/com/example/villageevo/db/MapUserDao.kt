@@ -14,7 +14,7 @@ interface MapUserDao {
     @Insert
     suspend fun insertAllUserData(data: List<MapUserDataEntity>)
     @Insert
-    suspend fun insertUserResources(data: MapUserResourceEntity)
+    suspend fun insertAllUserResources(data: List<MapUserResourceEntity>)
 
     @Query("UPDATE map_user_data SET value = value - :value WHERE id = :id")
     suspend fun updateData(id: Int, value: Int)

@@ -1,8 +1,5 @@
 package com.example.villageevo.repository
 
-import androidx.compose.runtime.getValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.room.Transaction
 import com.example.villageevo.db.MapUserDao
 import com.example.villageevo.domain.map.MapData
@@ -11,16 +8,14 @@ import com.example.villageevo.domain.map.MapResource
 import com.example.villageevo.domain.map.MapUserDataEntity
 import com.example.villageevo.domain.map.MapUserMetaDataEntity
 import com.example.villageevo.domain.map.MapUserResourceEntity
-import com.example.villageevo.viewmodel.GameViewModel
 
 class MapUserRepository(
     private val mapUserDao: MapUserDao
 ) {
-
     @Transaction
     suspend fun saveToMapUserResource(
         mapMeta: MapMetaData,
-        mapResource: MapResource,
+        mapResourceList: List<MapResource>,
         mapDataList: List<MapData>
     ){
         val mapUserDataList: List<MapUserDataEntity> = mapDataList.map { entity ->
@@ -38,14 +33,16 @@ class MapUserRepository(
             title = mapMeta.title,
             description = mapMeta.description
         )
-        val mapUserResource = MapUserResourceEntity(
-            id = mapResource.id,
-            idMap = mapResource.idMap,
-            name = mapResource.name,
-            sum = mapResource.sum
-        )
+        val mapUserResourceList: List<MapUserResourceEntity> = mapResourceList.map { entity ->
+            MapUserResourceEntity(
+                id = entity.id,
+                idMap = entity.idMap,
+                name = entity.name,
+                sum = entity.sum
+            )
+        }
         try {
-            mapUserDao.insertUserResources(mapUserResource)
+            mapUserDao.insertAllUserResources(mapUserResourceList)
             mapUserDao.insertAllUserData(mapUserDataList)
             mapUserDao.insertUserMetadata(mapMetaUser)
         }catch (e: Exception){
@@ -55,6 +52,9 @@ class MapUserRepository(
 
     suspend fun getMapUserResource(idMap:Int): List<MapUserResourceEntity>{
         return mapUserDao.getUserResource(idMap)
+    }
+    suspend fun getMapUserData(idMap:Int): List<MapUserDataEntity>{
+        return mapUserDao.getUserData(idMap)
     }
     suspend fun getMapMetaUser(): List<MapUserMetaDataEntity>{
         return mapUserDao.getUserMeta()

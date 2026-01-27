@@ -86,7 +86,6 @@ fun MainCityScreen(viewModel: GameViewModel) {
                     }
                 }
             }
-            MainGame(modifier = Modifier.weight(1f), viewModel)
         }
     }
 }
