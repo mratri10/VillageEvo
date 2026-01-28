@@ -12,20 +12,18 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.villageevo.domain.map.MapUserMetaDataEntity
+import com.example.villageevo.domain.map.MapMetaDataEntity
 import com.example.villageevo.viewmodel.MapViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun SelectScreen(viewModel: MapViewModel) {
-    val mapMeta: List<MapUserMetaDataEntity> by viewModel.getUserMeta.collectAsStateWithLifecycle()
+    val mapMeta: List<MapMetaDataEntity> by viewModel.getUserMeta.collectAsStateWithLifecycle()
     Column(
         modifier = Modifier.fillMaxSize()
     ) {

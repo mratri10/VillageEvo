@@ -2,12 +2,10 @@ package com.example.villageevo.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.villageevo.domain.map.MapData
+import com.example.villageevo.domain.map.MapDataEntity
 import com.example.villageevo.domain.map.MapMetaData
-import com.example.villageevo.domain.map.MapResource
-import com.example.villageevo.domain.map.MapUserDataEntity
-import com.example.villageevo.domain.map.MapUserMetaDataEntity
-import com.example.villageevo.domain.map.MapUserResourceEntity
+import com.example.villageevo.domain.map.MapMetaDataEntity
+import com.example.villageevo.domain.map.MapResourceEntity
 import com.example.villageevo.repository.MapUserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,20 +19,20 @@ class MapViewModel(private val repository: MapUserRepository): ViewModel(){
     private val _isUserExist = MutableStateFlow(false)
     val isUserExist = _isUserExist.asStateFlow()
 
-    private val _getUserMeta = MutableStateFlow(emptyList<MapUserMetaDataEntity>())
+    private val _getUserMeta = MutableStateFlow(emptyList<MapMetaDataEntity>())
     var getUserMeta = _getUserMeta.asStateFlow()
 
-    private val _getUserData = MutableStateFlow(emptyList<MapUserDataEntity>())
+    private val _getUserData = MutableStateFlow(emptyList<MapDataEntity>())
     var getUserData = _getUserData.asStateFlow()
 
-    private val _getUserResource = MutableStateFlow(emptyList<MapUserResourceEntity>())
+    private val _getUserResource = MutableStateFlow(emptyList<MapResourceEntity>())
     var getUserResource = _getUserResource.asStateFlow()
 
 
     fun insertUserMap(
         mapMetaUser: MapMetaData,
-        mapResource: List<MapResource>,
-        mapDataList: List<MapData>,
+        mapResource: List<MapResourceEntity>,
+        mapDataList: List<MapDataEntity>,
     ){
         viewModelScope.launch(Dispatchers.IO){
             repository.saveToMapUserResource(mapMetaUser, mapResource, mapDataList)
@@ -44,8 +42,6 @@ class MapViewModel(private val repository: MapUserRepository): ViewModel(){
     fun dataMapUser(){
         try {
             viewModelScope.launch(Dispatchers.IO){
-                val dataResource = repository.getMapMetaUser()
-                _isUserExist.value = dataResource.isNotEmpty()
                 _getUserMeta.value = repository.getMapMetaUser()
             }
         }catch (e: Exception){

@@ -4,16 +4,16 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.villageevo.domain.map.MapUserDataEntity
-import com.example.villageevo.domain.map.MapUserMetaDataEntity
-import com.example.villageevo.domain.map.MapUserResourceEntity
+import com.example.villageevo.domain.map.MapDataEntity
+import com.example.villageevo.domain.map.MapMetaDataEntity
+import com.example.villageevo.domain.map.MapResourceEntity
 
 @Database(
         entities =
                 [
-                    MapUserMetaDataEntity::class,
-                    MapUserDataEntity::class,
-                    MapUserResourceEntity::class
+                    MapMetaDataEntity::class,
+                    MapResourceEntity::class,
+                    MapDataEntity::class,
                 ],
         version = 3,
         exportSchema = false

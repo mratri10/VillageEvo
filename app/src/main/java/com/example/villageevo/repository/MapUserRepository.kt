@@ -2,12 +2,10 @@ package com.example.villageevo.repository
 
 import androidx.room.Transaction
 import com.example.villageevo.db.MapUserDao
-import com.example.villageevo.domain.map.MapData
+import com.example.villageevo.domain.map.MapDataEntity
 import com.example.villageevo.domain.map.MapMetaData
-import com.example.villageevo.domain.map.MapResource
-import com.example.villageevo.domain.map.MapUserDataEntity
-import com.example.villageevo.domain.map.MapUserMetaDataEntity
-import com.example.villageevo.domain.map.MapUserResourceEntity
+import com.example.villageevo.domain.map.MapMetaDataEntity
+import com.example.villageevo.domain.map.MapResourceEntity
 
 class MapUserRepository(
     private val mapUserDao: MapUserDao
@@ -15,11 +13,11 @@ class MapUserRepository(
     @Transaction
     suspend fun saveToMapUserResource(
         mapMeta: MapMetaData,
-        mapResourceList: List<MapResource>,
-        mapDataList: List<MapData>
+        mapResourceList: List<MapResourceEntity>,
+        mapDataList: List<MapDataEntity>
     ){
-        val mapUserDataList: List<MapUserDataEntity> = mapDataList.map { entity ->
-            MapUserDataEntity(
+        val mapUserDataList: List<MapDataEntity> = mapDataList.map { entity ->
+            MapDataEntity(
                 id = entity.id,
                 idMap = entity.idMap,
                 name = entity.name,
@@ -28,13 +26,13 @@ class MapUserRepository(
                 y = entity.y
             )
         }
-        val mapMetaUser = MapUserMetaDataEntity(
+        val mapMetaUser = MapMetaDataEntity(
             id = mapMeta.id,
             title = mapMeta.title,
             description = mapMeta.description
         )
-        val mapUserResourceList: List<MapUserResourceEntity> = mapResourceList.map { entity ->
-            MapUserResourceEntity(
+        val mapUserResourceList: List<MapResourceEntity> = mapResourceList.map { entity ->
+            MapResourceEntity(
                 id = entity.id,
                 idMap = entity.idMap,
                 name = entity.name,
@@ -50,13 +48,13 @@ class MapUserRepository(
         }
     }
 
-    suspend fun getMapUserResource(idMap:Int): List<MapUserResourceEntity>{
+    suspend fun getMapUserResource(idMap:Int): List<MapResourceEntity>{
         return mapUserDao.getUserResource(idMap)
     }
-    suspend fun getMapUserData(idMap:Int): List<MapUserDataEntity>{
+    suspend fun getMapUserData(idMap:Int): List<MapDataEntity>{
         return mapUserDao.getUserData(idMap)
     }
-    suspend fun getMapMetaUser(): List<MapUserMetaDataEntity>{
+    suspend fun getMapMetaUser(): List<MapMetaDataEntity>{
         return mapUserDao.getUserMeta()
     }
 

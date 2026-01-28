@@ -59,16 +59,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                 ) {
-                    val screen by viewModel.currentScreen.collectAsState()
-                    val isUserExist by mapUserModel.isUserExist.collectAsStateWithLifecycle()
-
-                    when (screen) {
-                        Screen.HOME ->if(isUserExist)
-                            SelectScreen(mapUserModel)
-                        else
-                            HomeScreen(viewModel, mapUserModel, soldierViewModel)
-                        Screen.CITY -> MainCityScreen(viewModel)
-                    }
+                    HomeScreen(viewModel, mapUserModel, soldierViewModel)
                 }
             }
         }

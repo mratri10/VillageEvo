@@ -8,18 +8,3 @@ data class MapMetaData (
     val title:String,
     val description:String,
 )
-
-data class MapData(
-    val id:Int,
-    val idMap: Int,
-    val name: String,
-    val value: Int,
-    val x: Int,
-    val y: Int,
-)
-data class MapResource(
-    val id: Int,
-    val idMap: Int,
-    val name: String,
-    val sum: Int,
-)

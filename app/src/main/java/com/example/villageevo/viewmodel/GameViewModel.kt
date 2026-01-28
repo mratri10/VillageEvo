@@ -4,11 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.villageevo.domain.building.BuildingType
 import com.example.villageevo.domain.building.Coordinate
-import com.example.villageevo.domain.map.MapData
+import com.example.villageevo.domain.map.MapDataEntity
 import com.example.villageevo.domain.map.MapMetaData
-import com.example.villageevo.domain.map.MapResource
-import com.example.villageevo.domain.soldier.MapSoldier
-import com.example.villageevo.domain.soldier.Soldier
+import com.example.villageevo.domain.map.MapResourceEntity
 import com.example.villageevo.repository.MapRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,10 +25,10 @@ class GameViewModel(private val repository: MapRepository) : ViewModel() {
     private val _metaList = MutableStateFlow<List<MapMetaData>>(emptyList())
     val metaList = _metaList.asStateFlow()
 
-    private val _mapData = MutableStateFlow<List<MapData>>(emptyList())
+    private val _mapData = MutableStateFlow<List<MapDataEntity>>(emptyList())
     val mapData = _mapData.asStateFlow()
 
-    private val _mapResource = MutableStateFlow<List<MapResource>>(emptyList())
+    private val _mapResource = MutableStateFlow<List<MapResourceEntity>>(emptyList())
     val mapResource = _mapResource.asStateFlow()
 
     init {

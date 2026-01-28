@@ -1,9 +1,9 @@
 package com.example.villageevo.repository
 
 import android.content.Context
-import com.example.villageevo.domain.map.MapData
+import com.example.villageevo.domain.map.MapDataEntity
 import com.example.villageevo.domain.map.MapMetaData
-import com.example.villageevo.domain.map.MapResource
+import com.example.villageevo.domain.map.MapResourceEntity
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 
 class MapRepository(private val context: Context) {
@@ -21,10 +21,10 @@ class MapRepository(private val context: Context) {
         }
     }
 
-    fun getMapData(): List<MapData> {
+    fun getMapData(): List<MapDataEntity> {
         return context.assets.open(mapData).use { inputStream ->
             csvReader.readAllWithHeader(inputStream).map {
-                MapData(
+                MapDataEntity(
                     it["id"]!!.toInt(),
                     it["id_map"]!!.toInt(),
                     it["name"]!!,
@@ -36,10 +36,10 @@ class MapRepository(private val context: Context) {
         }
     }
 
-    fun getMapResource(): List<MapResource> {
+    fun getMapResource(): List<MapResourceEntity> {
         return context.assets.open(mapResource).use { inputStream ->
             csvReader.readAllWithHeader(inputStream).map {
-                MapResource(
+                MapResourceEntity(
                         it["id"]!!.toInt(),
                         it["id_map"]!!.toInt(),
                         it["name"]!!,
