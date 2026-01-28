@@ -39,10 +39,10 @@ object BuildingRepository {
                 Coordinate(BuildingType.FOREST,1,2,Building(29,0,0)),
                 Coordinate(BuildingType.FOREST,2,2,Building(326,0,0)),
 
-                Coordinate(BuildingType.ANIMAL,1,0,Building(260,0,0)),
-                Coordinate(BuildingType.ANIMAL,1,1,Building(25,0,0)),
-                Coordinate(BuildingType.ANIMAL,2,1,Building(106,0,0)),
-                Coordinate(BuildingType.ANIMAL,2,0,Building(80,0,0))
+                Coordinate(BuildingType.WILD,1,0,Building(260,0,0)),
+                Coordinate(BuildingType.WILD,1,1,Building(25,0,0)),
+                Coordinate(BuildingType.WILD,2,1,Building(106,0,0)),
+                Coordinate(BuildingType.WILD,2,0,Building(80,0,0))
             )
             MapCategory.GRASS_SEA -> listOf(
                 Coordinate(BuildingType.HOUSE,0,0,Building(0,0,0)),

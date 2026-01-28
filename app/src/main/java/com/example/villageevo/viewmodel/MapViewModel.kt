@@ -38,18 +38,6 @@ class MapViewModel(private val repository: MapUserRepository): ViewModel(){
             repository.saveToMapUserResource(mapMetaUser, mapResource, mapDataList)
         }
     }
-
-    fun dataMapUser(){
-        try {
-            viewModelScope.launch(Dispatchers.IO){
-                _getUserMeta.value = repository.getMapMetaUser()
-            }
-        }catch (e: Exception){
-            e.printStackTrace()
-            _isUserExist.value = false
-        }
-    }
-
     fun dataMapUserById(id:Int){
         try {
             viewModelScope.launch (Dispatchers.IO ){

@@ -14,6 +14,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
 import com.example.villageevo.db.AppDatabase
 import com.example.villageevo.repository.MapRepository
 import com.example.villageevo.db.MapUserDao
@@ -47,19 +48,24 @@ class MainActivity : ComponentActivity() {
         val repository = MapRepository(this)
         val repositorySoldier = SoldierRepository(this)
 
-        val viewModel = GameViewModel(repository)
-        val mapUserModel = MapViewModel(repositoryUser)
+        val gameViewModel = GameViewModel(repository)
+        val mapViewModel = MapViewModel(repositoryUser)
         val soldierViewModel = SoldierViewModel(repositorySoldier)
 
-
-        mapUserModel.dataMapUser()
         setContent {
             VillageEvoTheme(dynamicColor = false) {
+                val navController = rememberNavController()
                 Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeScreen(viewModel, mapUserModel, soldierViewModel)
+//                    HomeScreen(viewModel, mapUserModel, soldierViewModel)
+                    NavGraph(
+                        navController,
+                        gameViewModel,
+                        mapViewModel,
+                        soldierViewModel
+                    )
                 }
             }
         }
