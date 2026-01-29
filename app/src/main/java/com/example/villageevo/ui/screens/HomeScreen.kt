@@ -44,7 +44,7 @@ import com.example.villageevo.viewmodel.MapViewModel
 import com.example.villageevo.viewmodel.SoldierViewModel
 import kotlin.math.ceil
 
-@SuppressLint("ConfigurationScreenWidthHeight")
+@SuppressLint("ConfigurationScreenWidthHeight", "AutoboxingStateCreation")
 @Composable
 fun HomeScreen(navController: NavController,viewModel: GameViewModel, mapViewModel: MapViewModel, soldierViewModel: SoldierViewModel) {
     // 1. PINDAHKAN SEMUA COLLECT KE ATAS (Top-Level)
@@ -58,6 +58,8 @@ fun HomeScreen(navController: NavController,viewModel: GameViewModel, mapViewMod
     // 2. Gunakan remember & derivedStateOf untuk filtering berat
     var selectedMeta by remember { mutableStateOf<MapMetaData?>(null) }
     var currentPage by remember { mutableStateOf(1) }
+
+    var idMapSelected by remember { mutableStateOf(0) }
 
     var isLoading by remember { mutableStateOf(false) }
 
@@ -81,6 +83,12 @@ fun HomeScreen(navController: NavController,viewModel: GameViewModel, mapViewMod
         selectedMeta?.id?.let { id ->
             mapViewModel.dataMapUserById(id)
             soldierViewModel.getSoldierByIdMap(id)
+        }
+    }
+
+    LaunchedEffect(mapMetaData) {
+        if(idMapSelected>0 && mapUserResource.isNotEmpty()){
+            navController.navigate("map/$idMapSelected")
         }
     }
 
@@ -172,10 +180,7 @@ fun HomeScreen(navController: NavController,viewModel: GameViewModel, mapViewMod
                                     mapViewModel.insertUserMap(it, mapResources,mapData, )
                                 }
                                 mapViewModel.dataMapUserById(it.id)
-                                if(mapUserResource.isNotEmpty()){
-                                    navController.navigate("map/${it.id}")
-//                                    isLoading = false
-                                }
+                                idMapSelected = it.id
                             }
                         }
 

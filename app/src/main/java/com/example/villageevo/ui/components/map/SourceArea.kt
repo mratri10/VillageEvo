@@ -4,9 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,73 +14,55 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.villageevo.R
 
 @Composable
-fun WildArea(
+fun SourceArea(
     modifier: Modifier = Modifier,
     sum: Int = 0,
     worker: Int = 0,
+    image:Int=0,
+    images:List<Int> = emptyList(),
+    spaceBy:Int=0,
+    sizeImage:Int=22
 ) {
-    val imageForest = when{
-        sum<60-> R.drawable.wild_l1
-        sum<120-> R.drawable.wild_l2
-        sum<180 -> R.drawable.wild_l3
-        sum<240 -> R.drawable.wild_l4
-        else -> R.drawable.wildf
-    }
-    val widthForest = when{
-        sum<60-> 2/5f
-        sum<120-> 3/5f
-        sum<180 -> 1f
-        sum<240 -> 1f
-        sum<300 -> 1f
-        else -> 1f
-    }
-    val heightForest = when{
-        sum<60-> 3/5f
-        sum<120-> 1f
-        sum<180 -> 1f
-        sum<240 -> 1f
-        sum<300 -> 1f
-        else -> 1f
-    }
-    Column (
+    val visualTreeCount = remember(sum) { sum.coerceAtMost(3) }
+
+    Box(
         modifier = modifier
             .fillMaxSize()
+            .clip(RoundedCornerShape(8.dp)) // Menjaga agar pohon tidak keluar batas petak
     ) {
-        Box(
-            modifier = Modifier.weight(widthForest).fillMaxSize(),
-        ) {
-            Image(
-                painter = painterResource(id = imageForest),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth(widthForest)
-                    .fillMaxHeight(heightForest)
-                    .align(Alignment.BottomStart),
-            )
-        }
+        Image(
+            painter = painterResource(id = image),
+            contentDescription = null,
+            modifier.fillMaxSize(),
+            alignment = Alignment.Center
+        )
         // 3. Label Resource & Worker (Disederhanakan)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .align(Alignment.BottomCenter)
                 .padding(2.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            ResourceBadge(label = "$sum", iconId = R.drawable.tree, color = Color.Cyan)
-            ResourceBadge(label = "$worker", iconId = R.drawable.farmer, color = Color.Green)
+            ResourceBadge1(label = "$sum", iconId = R.drawable.tree, color = Color.Cyan)
+            ResourceBadge1(label = "$worker", iconId = R.drawable.farmer, color = Color.Green)
         }
     }
 }
 
 @Composable
-private fun ResourceBadge(label: String, iconId: Int, color: Color) {
+fun ResourceBadge1(label: String, iconId: Int, color: Color) {
     Row(
         modifier = Modifier
             .background(color.copy(alpha = 0.8f), RoundedCornerShape(4.dp))

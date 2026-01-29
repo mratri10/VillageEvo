@@ -17,12 +17,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.example.villageevo.db.AppDatabase
 import com.example.villageevo.repository.MapRepository
-import com.example.villageevo.db.MapUserDao
 import com.example.villageevo.repository.MapUserRepository
 import com.example.villageevo.repository.SoldierRepository
-import com.example.villageevo.ui.screens.HomeScreen
-import com.example.villageevo.ui.screens.MainCityScreen
-import com.example.villageevo.ui.screens.SelectScreen
 import com.example.villageevo.ui.theme.VillageEvoTheme
 import com.example.villageevo.viewmodel.*
 

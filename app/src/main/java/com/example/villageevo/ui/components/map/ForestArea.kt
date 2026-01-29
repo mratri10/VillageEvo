@@ -23,17 +23,17 @@ import androidx.compose.ui.unit.dp
 import com.example.villageevo.R
 
 @Composable
-fun WildArea(
+fun ForestArea(
     modifier: Modifier = Modifier,
     sum: Int = 0,
     worker: Int = 0,
 ) {
     val imageForest = when{
-        sum<60-> R.drawable.wild_l1
-        sum<120-> R.drawable.wild_l2
-        sum<180 -> R.drawable.wild_l3
-        sum<240 -> R.drawable.wild_l4
-        else -> R.drawable.wildf
+        sum<60-> R.drawable.forest_l1
+        sum<120-> R.drawable.forest_l2
+        sum<180 -> R.drawable.forest_l3
+        sum<240 -> R.drawable.forest_l4
+        else -> R.drawable.forestf
     }
     val widthForest = when{
         sum<60-> 2/5f
