@@ -47,15 +47,16 @@ class MapUserRepository(
             print("Failed when save data: $e")
         }
     }
-
     suspend fun getMapUserResource(idMap:Int): List<MapResourceEntity>{
         return mapUserDao.getUserResource(idMap)
     }
     suspend fun getMapUserData(idMap:Int): List<MapDataEntity>{
         return mapUserDao.getUserData(idMap)
     }
-    suspend fun getMapMetaUser(): List<MapMetaDataEntity>{
-        return mapUserDao.getUserMeta()
+    suspend fun getMapMetaUser(id:Int): MapMetaDataEntity{
+        val data =  mapUserDao.getUserMeta(id)
+        if(data.isNotEmpty()) return data.first()
+        else return MapMetaDataEntity(0,"","")
     }
 
 }

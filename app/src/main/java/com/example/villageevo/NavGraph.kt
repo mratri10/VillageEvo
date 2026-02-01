@@ -9,8 +9,10 @@ import androidx.navigation.navArgument
 import com.example.villageevo.db.MapUserDao
 import com.example.villageevo.ui.screens.HomeScreen
 import com.example.villageevo.ui.screens.MapScreen
+import com.example.villageevo.viewmodel.BuildViewModel
 import com.example.villageevo.viewmodel.GameViewModel
 import com.example.villageevo.viewmodel.MapViewModel
+import com.example.villageevo.viewmodel.NpcViewModel
 import com.example.villageevo.viewmodel.SoldierViewModel
 
 @Composable
@@ -18,14 +20,16 @@ fun NavGraph(
     navController: NavHostController,
     gameViewModel: GameViewModel,
     mapViewModel: MapViewModel,
-    soldierViewModel: SoldierViewModel
+    soldierViewModel: SoldierViewModel,
+    buildViewModel: BuildViewModel,
+    npcViewModel: NpcViewModel
 )  {
     NavHost(
         navController = navController,
         startDestination = "home"
     ){
         composable ("home"){
-            HomeScreen(navController, gameViewModel, mapViewModel, soldierViewModel)
+            HomeScreen(navController, gameViewModel, mapViewModel, soldierViewModel, npcViewModel)
         }
         composable (
             route = "map/{idMap}",
@@ -34,11 +38,8 @@ fun NavGraph(
             backStackEntry ->
             val idMap = backStackEntry.arguments?.getInt("idMap") ?: 0
             MapScreen(
-                idMap = idMap,
-                navController = navController,
-                gameViewModel = gameViewModel,
                 mapViewModel = mapViewModel,
-                soldierViewModel = soldierViewModel
+                npcViewModel = npcViewModel
             )
         }
     }

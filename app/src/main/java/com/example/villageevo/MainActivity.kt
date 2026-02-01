@@ -16,8 +16,10 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.example.villageevo.db.AppDatabase
+import com.example.villageevo.repository.BuildRepository
 import com.example.villageevo.repository.MapRepository
 import com.example.villageevo.repository.MapUserRepository
+import com.example.villageevo.repository.NpcRepository
 import com.example.villageevo.repository.SoldierRepository
 import com.example.villageevo.ui.theme.VillageEvoTheme
 import com.example.villageevo.viewmodel.*
@@ -39,14 +41,21 @@ class MainActivity : ComponentActivity() {
 
         val database = AppDatabase.getDatabase(this)
         val mapUserDao = database.mapUserDao()
+        val buildDao = database.buildDao()
+        val npcDao = database.npcDao()
+
         val repositoryUser = MapUserRepository(mapUserDao)
+        val repositoryBuild = BuildRepository(buildDao)
 
         val repository = MapRepository(this)
         val repositorySoldier = SoldierRepository(this)
+        val repositoryNpc = NpcRepository(npcDao)
 
         val gameViewModel = GameViewModel(repository)
         val mapViewModel = MapViewModel(repositoryUser)
         val soldierViewModel = SoldierViewModel(repositorySoldier)
+        val buildViewModel = BuildViewModel(repositoryBuild)
+        val npcViewModel = NpcViewModel(repositoryNpc)
 
         setContent {
             VillageEvoTheme(dynamicColor = false) {
@@ -60,7 +69,9 @@ class MainActivity : ComponentActivity() {
                         navController,
                         gameViewModel,
                         mapViewModel,
-                        soldierViewModel
+                        soldierViewModel,
+                        buildViewModel,
+                        npcViewModel
                     )
                 }
             }

@@ -28,14 +28,14 @@ fun WildArea(
     sum: Int = 0,
     worker: Int = 0,
 ) {
-    val imageForest = when{
+    val imageSource = when{
         sum<60-> R.drawable.wild_l1
         sum<120-> R.drawable.wild_l2
         sum<180 -> R.drawable.wild_l3
         sum<240 -> R.drawable.wild_l4
         else -> R.drawable.wildf
     }
-    val widthForest = when{
+    val widthSource = when{
         sum<60-> 2/5f
         sum<120-> 3/5f
         sum<180 -> 1f
@@ -43,7 +43,7 @@ fun WildArea(
         sum<300 -> 1f
         else -> 1f
     }
-    val heightForest = when{
+    val heightSource = when{
         sum<60-> 3/5f
         sum<120-> 1f
         sum<180 -> 1f
@@ -56,14 +56,14 @@ fun WildArea(
             .fillMaxSize()
     ) {
         Box(
-            modifier = Modifier.weight(widthForest).fillMaxSize(),
+            modifier = Modifier.weight(1f).fillMaxSize(),
         ) {
             Image(
-                painter = painterResource(id = imageForest),
+                painter = painterResource(id = imageSource),
                 contentDescription = null,
                 modifier = Modifier
-                    .fillMaxWidth(widthForest)
-                    .fillMaxHeight(heightForest)
+                    .fillMaxWidth(widthSource)
+                    .fillMaxHeight(heightSource)
                     .align(Alignment.BottomStart),
             )
         }

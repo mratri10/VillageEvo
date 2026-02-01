@@ -1,0 +1,37 @@
+package com.example.villageevo.viewmodel
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.villageevo.domain.building.BuildDataEntity
+import com.example.villageevo.domain.building.BuildEvoEntity
+import com.example.villageevo.domain.building.MapBuildEntity
+import com.example.villageevo.repository.BuildRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+class BuildViewModel(private val repositoryBuild: BuildRepository) : ViewModel() {
+    fun insertBuild(
+        mapBuild: MapBuildEntity,
+        buildData: BuildDataEntity
+    ){
+        try {
+            viewModelScope.launch ( Dispatchers.IO ){
+                repositoryBuild.saveBuildData(mapBuild, buildData)
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    fun insertBuildEvo(
+        buildEvo: BuildEvoEntity
+    ){
+        try{
+            viewModelScope.launch (Dispatchers.IO){
+                repositoryBuild.saveBuildEvo(buildEvo)
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+}

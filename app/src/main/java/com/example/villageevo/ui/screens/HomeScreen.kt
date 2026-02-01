@@ -3,30 +3,12 @@ package com.example.villageevo.ui.screens
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,20 +21,25 @@ import com.example.villageevo.domain.map.MapMetaData
 import com.example.villageevo.ui.components.VilvoLoading
 import com.example.villageevo.ui.components.home.IconMap
 import com.example.villageevo.ui.components.home.PaginationSection
-import com.example.villageevo.viewmodel.GameViewModel
-import com.example.villageevo.viewmodel.MapViewModel
-import com.example.villageevo.viewmodel.SoldierViewModel
+import com.example.villageevo.viewmodel.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.ceil
 
 @SuppressLint("ConfigurationScreenWidthHeight", "AutoboxingStateCreation")
 @Composable
-fun HomeScreen(navController: NavController,viewModel: GameViewModel, mapViewModel: MapViewModel, soldierViewModel: SoldierViewModel) {
+fun HomeScreen(
+    navController: NavController,
+    viewModel: GameViewModel,
+    mapViewModel: MapViewModel,
+    soldierViewModel: SoldierViewModel,
+    npcViewModel: NpcViewModel,
+) {
     // 1. PINDAHKAN SEMUA COLLECT KE ATAS (Top-Level)
     val mapMetaData by viewModel.metaList.collectAsStateWithLifecycle()
     val mapData by viewModel.mapData.collectAsStateWithLifecycle()
-    val mapResources by viewModel.mapResource.collectAsStateWithLifecycle()
+    val mapResourceList by viewModel.mapResource.collectAsStateWithLifecycle()
     val mapSoldier by soldierViewModel.mapSoldierDisplay.collectAsStateWithLifecycle()
-
     val mapUserResource by mapViewModel.getUserResource.collectAsStateWithLifecycle()
 
     // 2. Gunakan remember & derivedStateOf untuk filtering berat
@@ -64,8 +51,8 @@ fun HomeScreen(navController: NavController,viewModel: GameViewModel, mapViewMod
     var isLoading by remember { mutableStateOf(false) }
 
     // Efek filter resource agar tidak dihitung ulang setiap frame
-    val filteredResources = remember(selectedMeta, mapResources, mapUserResource) {
-        val csvData = mapResources.filter { it.idMap == selectedMeta?.id }
+    val filteredResources = remember(selectedMeta, mapResourceList, mapUserResource) {
+        val csvData = mapResourceList.filter { it.idMap == selectedMeta?.id }
         val sqlData = mapUserResource.filter { it.idMap == selectedMeta?.id }
         sqlData.ifEmpty { csvData }
     }
@@ -86,11 +73,12 @@ fun HomeScreen(navController: NavController,viewModel: GameViewModel, mapViewMod
         }
     }
 
-    LaunchedEffect(mapMetaData) {
-        if(idMapSelected>0 && mapUserResource.isNotEmpty()){
+    LaunchedEffect(idMapSelected, isLoading) {
+        if(idMapSelected>0 && !isLoading && mapResourceList.isNotEmpty()){
             navController.navigate("map/$idMapSelected")
         }
     }
+    val scope = rememberCoroutineScope()
 
     Row(modifier = Modifier.fillMaxSize().background(Color.Black)) {
         // GRID SECTION
@@ -130,7 +118,6 @@ fun HomeScreen(navController: NavController,viewModel: GameViewModel, mapViewMod
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 textAlign = TextAlign.Center, color = Color.White,
             )
-
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier.padding(5.dp),
@@ -148,7 +135,6 @@ fun HomeScreen(navController: NavController,viewModel: GameViewModel, mapViewMod
                     }
                 }
             }
-
             // INFO SOLDIER
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
@@ -159,7 +145,6 @@ fun HomeScreen(navController: NavController,viewModel: GameViewModel, mapViewMod
                 items(mapSoldier.size){index->
                     val soldier = mapSoldier[index]
                     Row(
-//                        modifier = Modifier.align(Alignment.CenterVertically)
                         verticalAlignment = Alignment.CenterVertically,
                     ){
                         IconMap(soldier.name, Color.Red.copy(0.5f))
@@ -172,23 +157,31 @@ fun HomeScreen(navController: NavController,viewModel: GameViewModel, mapViewMod
             Button(
                 enabled = selectedMeta != null && !isLoading,
                 onClick = {
-                    isLoading = true
-                    try {
                         if (mapSoldier.isEmpty()){
-                            selectedMeta?.let {
-                                if(mapUserResource.isEmpty()){
-                                    mapViewModel.insertUserMap(it, mapResources,mapData, )
+                            selectedMeta?.let { meta ->
+                                isLoading = true
+                                scope.launch {
+                                    try {
+                                        if(mapUserResource.isEmpty()){
+                                            mapViewModel.insertUserMap(meta, mapResourceList,mapData, )
+                                            npcViewModel.saveNpcFirst()
+                                            delay(500)
+                                        }
+                                        mapViewModel.dataMapUserById(meta.id)
+                                        idMapSelected = meta.id
+                                    }catch (e:Exception) {
+                                        e.printStackTrace()
+                                    }finally {
+                                        isLoading = false
+                                    }
                                 }
-                                mapViewModel.dataMapUserById(it.id)
-                                idMapSelected = it.id
                             }
+                        }else{
+                            // Logika untuk mode "BATTLE" (Langsung navigasi)
+//                            selectedMeta?.let { meta ->
+//                                navController.navigate("map_screen/${meta.id}")
+//                            }
                         }
-
-                    }catch (e:Exception){
-                        e.printStackTrace()
-                        isLoading = false
-                    }
-
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan, contentColor = Color.Black)

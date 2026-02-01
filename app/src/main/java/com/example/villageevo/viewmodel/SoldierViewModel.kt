@@ -2,7 +2,6 @@ package com.example.villageevo.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.villageevo.domain.soldier.MapSoldier
 import com.example.villageevo.domain.soldier.MapSoldierDisplay
 import com.example.villageevo.domain.soldier.Soldier
 import com.example.villageevo.repository.SoldierRepository

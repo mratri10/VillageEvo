@@ -17,15 +17,24 @@ import com.example.villageevo.R
 @Composable
 fun IconMap(name:String, color: Color= Color.Gray) {
     when(name.lowercase()){
-        "forest" -> UnitImage(R.drawable.wood)
+        "forest" -> UnitImage(R.drawable.tree)
         "wild"->UnitImage(R.drawable.deer)
-        "gold"->UnitImage(R.drawable.gold)
-        "rock"->UnitImage(R.drawable.rock)
-        "iron"->UnitImage(R.drawable.iron)
+        "mine_iron"->UnitImage(R.drawable.mine_iron)
+        "mine_rock"->UnitImage(R.drawable.mine_rock)
+        "mine_gold"->UnitImage(R.drawable.mine_gold)
+
         "infantry"->UnitImage(R.drawable.infantry,color)
         "calvary"->UnitImage(R.drawable.calvary,color)
         "archer"->UnitImage(R.drawable.archer,color)
         "spearman"->UnitImage(R.drawable.spearman,color)
+
+        "food"-> UnitImage(R.drawable.food)
+        "coin"-> UnitImage(R.drawable.coin)
+        "wood"-> UnitImage(R.drawable.wood)
+        "human"-> UnitImage(R.drawable.farmer)
+        "gold"->UnitImage(R.drawable.gold)
+        "iron"->UnitImage(R.drawable.iron)
+        "rock"->UnitImage(R.drawable.rock)
         else -> Text(text = name, style = MaterialTheme.typography.labelSmall, color = Color.White)
 
     }

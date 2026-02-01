@@ -19,23 +19,22 @@ class MapViewModel(private val repository: MapUserRepository): ViewModel(){
     private val _isUserExist = MutableStateFlow(false)
     val isUserExist = _isUserExist.asStateFlow()
 
-    private val _getUserMeta = MutableStateFlow(emptyList<MapMetaDataEntity>())
-    var getUserMeta = _getUserMeta.asStateFlow()
-
     private val _getUserData = MutableStateFlow(emptyList<MapDataEntity>())
     var getUserData = _getUserData.asStateFlow()
 
     private val _getUserResource = MutableStateFlow(emptyList<MapResourceEntity>())
     var getUserResource = _getUserResource.asStateFlow()
 
+    private val _getUserMeta = MutableStateFlow(MapMetaDataEntity(0,"",""))
+    var getUserMeta = _getUserMeta.asStateFlow()
 
     fun insertUserMap(
         mapMetaUser: MapMetaData,
-        mapResource: List<MapResourceEntity>,
+        mapResourceList: List<MapResourceEntity>,
         mapDataList: List<MapDataEntity>,
     ){
         viewModelScope.launch(Dispatchers.IO){
-            repository.saveToMapUserResource(mapMetaUser, mapResource, mapDataList)
+            repository.saveToMapUserResource(mapMetaUser, mapResourceList, mapDataList)
         }
     }
     fun dataMapUserById(id:Int){
@@ -43,6 +42,7 @@ class MapViewModel(private val repository: MapUserRepository): ViewModel(){
             viewModelScope.launch (Dispatchers.IO ){
                 _getUserResource.value = repository.getMapUserResource(id)
                 _getUserData.value = repository.getMapUserData(id)
+                _getUserMeta.value = repository.getMapMetaUser(id)
             }
         }catch (e: Exception){
             e.printStackTrace()

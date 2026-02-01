@@ -21,8 +21,8 @@ interface MapUserDao {
 
     @Query("DELETE FROM map_user_data WHERE value <= 0") suspend fun deleteEmptyTiles()
 
-    @Query("SELECT * FROM map_user_metadata")
-    suspend fun getUserMeta(): List<MapMetaDataEntity>
+    @Query("SELECT * FROM map_user_metadata WHERE id = :id")
+    suspend fun getUserMeta(id: Int): List<MapMetaDataEntity>
     @Query("SELECT * FROM map_user_resource WHERE idMap = :idMap")
     suspend fun getUserResource(idMap: Int):List<MapResourceEntity>
     @Query("SELECT * FROM map_user_data WHERE idMap = :idMap")
