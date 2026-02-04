@@ -11,9 +11,6 @@ import kotlinx.coroutines.launch
 
 class SoldierViewModel(private val repository: SoldierRepository) : ViewModel() {
 
-    private val _soldier = MutableStateFlow<Soldier?>(null)
-    val soldier = _soldier.asStateFlow()
-
     private val _mapSoldierDisplay = MutableStateFlow<List<MapSoldierDisplay>>(emptyList())
     val mapSoldierDisplay = _mapSoldierDisplay.asStateFlow()
 
@@ -32,12 +29,6 @@ class SoldierViewModel(private val repository: SoldierRepository) : ViewModel() 
                 )
             }
             _mapSoldierDisplay.value = combinedData
-        }
-    }
-
-    fun getSoldierById(idSoldier:Int){
-        viewModelScope.launch {
-            _soldier.value = repository.getSoldier().first() { it.id == idSoldier }
         }
     }
 }

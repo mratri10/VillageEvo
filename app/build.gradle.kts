@@ -64,16 +64,15 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     // Pastikan versi ini ada (minimal 1.5.0 untuk Material 3)
-    implementation("com.google.android.material:material:1.11.0")
+    implementation(libs.material)
 
     // Untuk Compose Material 3
-    implementation("androidx.compose.material3:material3")
-    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.9.2")
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.kotlin.csv.jvm)
 
-    val roomVersion = "2.6.1"
     // Library utama Room
-    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation(libs.androidx.room.runtime)
     // Support untuk Kotlin Coroutines & Flow (Sangat penting untuk MVVM)
-    implementation("androidx.room:room-ktx:$roomVersion")
-    ksp("androidx.room:room-compiler:$roomVersion")
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 }

@@ -1,5 +1,6 @@
 package com.example.villageevo.util
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -26,6 +27,7 @@ data class SizeApp(
 
 val LocalSizeApp = staticCompositionLocalOf<SizeApp> { error("No SizeApp provided") }
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun rememberSizeApp(): SizeApp {
     val configuration = LocalConfiguration.current

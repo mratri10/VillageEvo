@@ -1,7 +1,6 @@
 package com.example.villageevo.ui.components.map
 
 import android.annotation.SuppressLint
-import android.widget.Button
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
