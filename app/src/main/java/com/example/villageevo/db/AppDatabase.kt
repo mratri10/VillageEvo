@@ -10,8 +10,9 @@ import com.example.villageevo.domain.building.MapBuildEntity
 import com.example.villageevo.domain.map.MapDataEntity
 import com.example.villageevo.domain.map.MapMetaDataEntity
 import com.example.villageevo.domain.map.MapResourceEntity
-import com.example.villageevo.domain.soldier.NpcAbilityEntity
-import com.example.villageevo.domain.soldier.NpcEntity
+import com.example.villageevo.domain.npc.NpcAbilityEntity
+import com.example.villageevo.domain.npc.NpcAssignEntity
+import com.example.villageevo.domain.npc.NpcEntity
 
 @Database(
         entities =
@@ -25,9 +26,10 @@ import com.example.villageevo.domain.soldier.NpcEntity
                     MapBuildEntity::class,
 
                     NpcEntity::class,
-                    NpcAbilityEntity::class
+                    NpcAbilityEntity::class,
+                    NpcAssignEntity::class
                 ],
-        version = 4,
+        version = 5,
         exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

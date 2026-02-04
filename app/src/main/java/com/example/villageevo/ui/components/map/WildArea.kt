@@ -26,7 +26,6 @@ import com.example.villageevo.R
 fun WildArea(
     modifier: Modifier = Modifier,
     sum: Int = 0,
-    worker: Int = 0,
 ) {
     val imageSource = when{
         sum<60-> R.drawable.wild_l1
@@ -75,7 +74,7 @@ fun WildArea(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             ResourceBadge(label = "$sum", iconId = R.drawable.tree, color = Color.Cyan)
-            ResourceBadge(label = "$worker", iconId = R.drawable.farmer, color = Color.Green)
+//            ResourceBadge(label = "$worker", iconId = R.drawable.farmer, color = Color.Green)
         }
     }
 }

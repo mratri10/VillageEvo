@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,13 +20,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.villageevo.domain.map.MapMetaDataEntity
-import com.example.villageevo.domain.soldier.NpcEntity
-import com.example.villageevo.ui.components.home.IconMap
 
 @Composable
 fun IndicatorMap(
     userMeta: MapMetaDataEntity,
-    npcList:List<NpcEntity>
+    countNpc:Int
 ){
     Column {
         Text(userMeta.title, color= Color.White, textAlign = TextAlign.Center)
@@ -44,7 +41,7 @@ fun IndicatorMap(
                     ){
                         Text(index.toString())
                         Text(
-                            text = npcList.size.toString(),
+                            text = countNpc.toString(),
                             style = MaterialTheme.typography.labelSmall,
                             color = Color.White
                         )

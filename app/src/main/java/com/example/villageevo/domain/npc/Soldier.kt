@@ -1,4 +1,4 @@
-package com.example.villageevo.domain.soldier
+package com.example.villageevo.domain.npc
 
 data class Soldier(
     val id:Int,

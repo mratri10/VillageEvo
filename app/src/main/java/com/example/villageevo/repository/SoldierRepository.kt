@@ -1,8 +1,8 @@
 package com.example.villageevo.repository
 
 import android.content.Context
-import com.example.villageevo.domain.soldier.MapSoldier
-import com.example.villageevo.domain.soldier.Soldier
+import com.example.villageevo.domain.npc.MapSoldier
+import com.example.villageevo.domain.npc.Soldier
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 
 class SoldierRepository(private val context: Context) {

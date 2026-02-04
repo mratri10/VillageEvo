@@ -27,6 +27,7 @@ fun ForestArea(
     modifier: Modifier = Modifier,
     sum: Int = 0,
     worker: Int = 0,
+    id:Int = 0
 ) {
     val imageForest = when{
         sum<60-> R.drawable.forest_l1
@@ -75,6 +76,18 @@ fun ForestArea(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             ResourceBadge(label = "$sum", iconId = R.drawable.tree, color = Color.Cyan)
+            Box(
+                modifier = Modifier.background(
+                    MaterialTheme.colorScheme.primary,
+                    shape =RoundedCornerShape(4.dp)
+                ).padding(2.dp)
+            ){
+                Text(id.toString(), style = MaterialTheme.typography.labelSmall.copy(
+                    color = Color.White
+                ),
+                    modifier = Modifier.padding(2.dp)
+                )
+            }
             ResourceBadge(label = "$worker", iconId = R.drawable.farmer, color = Color.Green)
         }
     }

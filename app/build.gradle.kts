@@ -75,8 +75,4 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     // Support untuk Kotlin Coroutines & Flow (Sangat penting untuk MVVM)
     implementation("androidx.room:room-ktx:$roomVersion")
-
-    // Compiler untuk memproses anotasi (Entity, Dao, dll)
-    // Compiler untuk memproses anotasi (Entity, Dao, dll)
-    ksp("androidx.room:room-compiler:$roomVersion")
 }
