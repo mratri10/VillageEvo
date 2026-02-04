@@ -26,7 +26,7 @@ fun IndicatorMap(userMeta: MapMetaDataEntity, countNpc: Int) {
     val sizeApp = LocalSizeApp.current
     Column {
         Text(userMeta.title, color = Color.White, textAlign = TextAlign.Center)
-        Box(Modifier.weight(1f)) {
+        Box() {
             LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
                     modifier = Modifier.padding(sizeApp.paddingSmall),
