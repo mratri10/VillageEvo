@@ -72,7 +72,7 @@ fun BuildArea(onClick: () -> Unit) {
                                         .background(color = Color.Transparent, toHalfCircle)
                 ) {}
 
-                buttonList.forEach { it ->
+                buttonList.forEach {
                         val sweep = 36f
                         val midAngle = it.degree + sweep / 2
                         Button(
