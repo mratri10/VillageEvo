@@ -17,26 +17,22 @@ import com.example.villageevo.domain.npc.NpcEntity
 @Database(
         entities =
                 [
-                    MapMetaDataEntity::class,
-                    MapResourceEntity::class,
-                    MapDataEntity::class,
-
-                    BuildEvoEntity::class,
-                    BuildDataEntity::class,
-                    MapBuildEntity::class,
-
-                    NpcEntity::class,
-                    NpcAbilityEntity::class,
-                    NpcAssignEntity::class
-                ],
-        version = 5,
+                        MapMetaDataEntity::class,
+                        MapResourceEntity::class,
+                        MapDataEntity::class,
+                        BuildEvoEntity::class,
+                        BuildDataEntity::class,
+                        MapBuildEntity::class,
+                        NpcEntity::class,
+                        NpcAbilityEntity::class,
+                        NpcAssignEntity::class],
+        version = 7,
         exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun mapUserDao(): MapUserDao
     abstract fun buildDao(): BuildDao
     abstract fun npcDao(): NpcDao
-
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null

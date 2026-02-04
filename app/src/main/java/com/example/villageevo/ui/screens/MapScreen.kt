@@ -15,6 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.villageevo.R
 import com.example.villageevo.domain.building.BuildingType
 import com.example.villageevo.ui.components.map.*
+import com.example.villageevo.util.LocalSizeApp
 import com.example.villageevo.viewmodel.MapViewModel
 import com.example.villageevo.viewmodel.NpcViewModel
 
@@ -22,6 +23,7 @@ import com.example.villageevo.viewmodel.NpcViewModel
 @Composable
 fun MapScreen(mapViewModel: MapViewModel, npcViewModel: NpcViewModel) {
     val isShowBuild = remember { mutableStateOf(false) }
+    val sizeApp = LocalSizeApp.current
 
     val userData by mapViewModel.getUserData.collectAsStateWithLifecycle()
     val userMeta by mapViewModel.getUserMeta.collectAsStateWithLifecycle()
@@ -65,17 +67,17 @@ fun MapScreen(mapViewModel: MapViewModel, npcViewModel: NpcViewModel) {
                                                 }
                                             }
                                     MapGrid(
-                                        type = type,
-                                        modifier = Modifier.align(Alignment.Center),
-                                        data = cellData,
-                                        onClick = {id ->
-                                            idMapSelect.intValue = id
-                                        }
+                                            type = type,
+                                            modifier = Modifier.align(Alignment.Center),
+                                            data = cellData,
+                                            onClick = { id -> idMapSelect.intValue = id }
                                     )
                                 } else {
                                     Button(
                                             onClick = { isShowBuild.value = true },
-                                            modifier = Modifier.fillMaxSize().padding(5.dp),
+                                            modifier =
+                                                    Modifier.fillMaxSize()
+                                                            .padding(sizeApp.paddingSmall),
                                             colors =
                                                     ButtonColors(
                                                             contentColor = Color.Transparent,
@@ -100,21 +102,22 @@ fun MapScreen(mapViewModel: MapViewModel, npcViewModel: NpcViewModel) {
             }
             // Sidebar atau Panel Detail
             Box(modifier = Modifier.weight(1f).fillMaxHeight().background(Color.Black)) {
-                IndicatorMap(userMeta = userMeta, countNpc )
+                IndicatorMap(userMeta = userMeta, countNpc)
             }
         }
         if (isShowBuild.value) {
             BuildArea(onClick = { isShowBuild.value = false })
         }
-        if(idMapSelect.value>0){
-            Box(modifier = Modifier.fillMaxSize()
-                .clickable{},
-                contentAlignment = Alignment.Center){
+        if (idMapSelect.value > 0) {
+            Box(
+                    modifier = Modifier.fillMaxSize().clickable {},
+                    contentAlignment = Alignment.Center
+            ) {
                 NpcSelect(
-                    npcViewModel = npcViewModel,
-                    idMapUser= idMapSelect.intValue,
-                    onClick = {idMapSelect.intValue = it
-                })
+                        npcViewModel = npcViewModel,
+                        idMapUser = idMapSelect.intValue,
+                        onClick = { idMapSelect.intValue = it }
+                )
             }
         }
     }

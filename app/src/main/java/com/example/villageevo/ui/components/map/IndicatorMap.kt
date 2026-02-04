@@ -18,44 +18,44 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.example.villageevo.domain.map.MapMetaDataEntity
+import com.example.villageevo.util.LocalSizeApp
 
 @Composable
-fun IndicatorMap(
-    userMeta: MapMetaDataEntity,
-    countNpc:Int
-){
+fun IndicatorMap(userMeta: MapMetaDataEntity, countNpc: Int) {
+    val sizeApp = LocalSizeApp.current
     Column {
-        Text(userMeta.title, color= Color.White, textAlign = TextAlign.Center)
-        Box(Modifier.weight(1f)){
-            LazyVerticalGrid (
-                columns = GridCells.Fixed(2),
-                modifier = Modifier.padding(5.dp),
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
-                verticalArrangement = Arrangement.spacedBy(5.dp)
-            ){
-                items(4){index->
+        Text(userMeta.title, color = Color.White, textAlign = TextAlign.Center)
+        Box(Modifier.weight(1f)) {
+            LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier.padding(sizeApp.paddingSmall),
+                    horizontalArrangement = Arrangement.spacedBy(sizeApp.paddingSmall),
+                    verticalArrangement = Arrangement.spacedBy(sizeApp.paddingSmall)
+            ) {
+                items(4) { index ->
                     Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ){
+                            verticalAlignment = Alignment.CenterVertically,
+                    ) {
                         Text(index.toString())
                         Text(
-                            text = countNpc.toString(),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color.White
+                                text = countNpc.toString(),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = Color.White
                         )
                     }
                 }
             }
         }
         Button(
-            onClick = {},
-            modifier = Modifier.fillMaxWidth().padding(10.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan, contentColor = Color.Black),
-            shape = RoundedCornerShape(size = 5.dp)
-        ) {
-            Text("Turn")
-        }
+                onClick = {},
+                modifier = Modifier.fillMaxWidth().padding(sizeApp.paddingMedium),
+                colors =
+                        ButtonDefaults.buttonColors(
+                                containerColor = Color.Cyan,
+                                contentColor = Color.Black
+                        ),
+                shape = RoundedCornerShape(size = sizeApp.paddingSmall)
+        ) { Text("Turn") }
     }
 }

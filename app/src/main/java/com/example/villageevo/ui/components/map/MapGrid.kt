@@ -9,22 +9,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.villageevo.domain.building.BuildingType
 import com.example.villageevo.domain.map.MapDataEntity
+import com.example.villageevo.util.LocalSizeApp
 
 @Composable
 fun MapGrid(
-    type: BuildingType,
-    modifier: Modifier = Modifier,
-    data: MapDataEntity,
-    onClick: (id:Int) -> Unit = {}
+        type: BuildingType,
+        modifier: Modifier = Modifier,
+        data: MapDataEntity,
+        onClick: (id: Int) -> Unit = {}
 ) {
+    val sizeApp = LocalSizeApp.current
     println(data.toString())
     Box(
-        modifier = Modifier.fillMaxSize().padding().clickable { onClick(data.id) }
+            modifier =
+                    Modifier.fillMaxSize().padding(sizeApp.paddingSmall).clickable {
+                        onClick(data.id)
+                    }
     ) {
-            when (type) {
-                BuildingType.FOREST -> ForestArea(modifier, data.value, 0, data.id)
-                BuildingType.WILD -> WildArea(modifier, data.value)
-                else -> Text("Unknown")
-            }
+        when (type) {
+            BuildingType.FOREST -> ForestArea(modifier, data.value, 0, data.id)
+            BuildingType.WILD -> WildArea(modifier, data.value)
+            else -> Text("Unknown")
+        }
     }
 }
