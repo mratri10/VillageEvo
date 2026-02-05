@@ -24,11 +24,11 @@ fun BuildArea(onClick: () -> Unit) {
 
         val buttonList: List<ButtonData> =
                 listOf(
-                        ButtonData("Market", R.drawable.build_market, {}, -180f, 14, -15),
-                        ButtonData("House", R.drawable.build_house, {}, -144f, 14, 3),
-                        ButtonData("Build", R.drawable.build, {}, -108f, 2, 4),
-                        ButtonData("School", R.drawable.build_school, {}, -72f, 14, 3),
-                        ButtonData("Battle", R.drawable.build_battle, {}, -36f, 14, -15)
+                        ButtonData("Market", R.drawable.build_market, {}, -180f, 6, -7),
+                        ButtonData("House", R.drawable.build_house, {}, -144f, 6, 1),
+                        ButtonData("Build", R.drawable.build, {}, -108f, 2, 2),
+                        ButtonData("School", R.drawable.build_school, {}, -72f, 6, 1),
+                        ButtonData("Battle", R.drawable.build_battle, {}, -36f, 6, -7)
                 )
 
         val toHalfCircle = GenericShape { size, _ ->
@@ -99,7 +99,7 @@ fun BuildArea(onClick: () -> Unit) {
                                                         MaterialTheme.colorScheme.tertiary
                                                 ),
                                         modifier =
-                                                Modifier.size(sizeApp.iconSize)
+                                                Modifier.size(sizeApp.iconSize/2)
                                                         .offset {
                                                                 IntOffset(
                                                                         offset.x.toInt() *
@@ -125,7 +125,7 @@ fun BuildArea(onClick: () -> Unit) {
                                 )
                 ) {
                         Icon(
-                                modifier = Modifier.size(sizeApp.iconSize),
+                                modifier = Modifier.size(sizeApp.iconSize/2),
                                 imageVector = Icons.Rounded.Close,
                                 contentDescription = "Back"
                         )

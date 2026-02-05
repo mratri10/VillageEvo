@@ -27,10 +27,32 @@ class NpcRepository(private val npcDao: NpcDao){
         return npcDao.countNpc()
     }
 
-    suspend fun getNpcAbility(page: Int, pageSize: Int): List<NpcMap> {
+    suspend fun getNpcAbility(
+        page: Int,
+        pageSize: Int = 10,
+        orderBy: String = "",
+        filterWoodier: Int = 0,
+        filterFarmer: Int = 0,
+        filterMiner: Int = 0,
+        filterInfantry: Int = 0,
+        filterArcher: Int = 0,
+        filterCalvary: Int = 0,
+        filterSpearman: Int = 0
+    )
+    : List<NpcMap> {
         // Calculate offset: Page 1 starts at 0, Page 2 starts at 20, etc.
         val offset = (page - 1) * pageSize
-        return npcDao.getNpcAbilityPaged(pageSize, offset)
+        return npcDao.getNpcWithOrderAndFilter(
+            pageSize, offset,
+            orderBy,
+            filterWoodier,
+            filterFarmer,
+            filterMiner,
+            filterInfantry,
+            filterArcher,
+            filterCalvary,
+            filterSpearman
+        )
     }
 
     suspend fun getNpcAssign(npcList:List<Int>): List<NpcAssignEntity> {

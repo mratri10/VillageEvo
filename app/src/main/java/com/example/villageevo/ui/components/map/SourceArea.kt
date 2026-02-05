@@ -23,37 +23,16 @@ import com.example.villageevo.R
 import com.example.villageevo.util.LocalSizeApp
 
 @Composable
-fun WildArea(
-        modifier: Modifier = Modifier,
-        sum: Int = 0,
+fun SourceArea(
+    modifier: Modifier = Modifier,
+    sum: Int = 0,
+    imageSource:Int,
+    widthSource: Float,
+    heightSource: Float,
+    iconMap:Int,
+    worker: Int = 0, id: Int = 0
 ) {
     val sizeApp = LocalSizeApp.current
-    val imageSource =
-            when {
-                sum < 60 -> R.drawable.wild_l1
-                sum < 120 -> R.drawable.wild_l2
-                sum < 180 -> R.drawable.wild_l3
-                sum < 240 -> R.drawable.wild_l4
-                else -> R.drawable.wildf
-            }
-    val widthSource =
-            when {
-                sum < 60 -> 2 / 5f
-                sum < 120 -> 3 / 5f
-                sum < 180 -> 1f
-                sum < 240 -> 1f
-                sum < 300 -> 1f
-                else -> 1f
-            }
-    val heightSource =
-            when {
-                sum < 60 -> 3 / 5f
-                sum < 120 -> 1f
-                sum < 180 -> 1f
-                sum < 240 -> 1f
-                sum < 300 -> 1f
-                else -> 1f
-            }
     Column(modifier = modifier.fillMaxSize()) {
         Box(
                 modifier = Modifier.weight(1f).fillMaxSize(),
@@ -72,9 +51,21 @@ fun WildArea(
                 modifier = Modifier.fillMaxWidth().padding(sizeApp.paddingSmall),
                 horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            ResourceBadge(label = "$sum", iconId = R.drawable.tree, color = Color.Cyan)
-            //            ResourceBadge(label = "$worker", iconId = R.drawable.farmer, color =
-            // Color.Green)
+            ResourceBadge(label = "$sum", iconId = iconMap, color = Color.Cyan)
+            Box(
+                modifier =
+                    Modifier.background(
+                        MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(sizeApp.paddingSmall)
+                    )
+                        .padding(sizeApp.paddingSmall/2)
+            ) {
+                Text(
+                    id.toString(),
+                    style = MaterialTheme.typography.labelSmall.copy(color = Color.White)
+                )
+            }
+            ResourceBadge(label = "$worker", iconId = R.drawable.farmer, color = Color.Green)
         }
     }
 }
@@ -88,17 +79,14 @@ private fun ResourceBadge(label: String, iconId: Int, color: Color) {
                                     color.copy(alpha = 0.8f),
                                     RoundedCornerShape(sizeApp.paddingSmall)
                             )
-                            .padding(
-                                    horizontal = sizeApp.paddingSmall,
-                                    vertical = sizeApp.paddingSmall / 2
-                            ),
+                            .padding(sizeApp.paddingSmall / 2),
             verticalAlignment = Alignment.CenterVertically
     ) {
         if (color == Color.Green) { // Logika posisi ikon (kiri/kanan)
             Text(label, style = MaterialTheme.typography.labelSmall, color = Color.Black)
-            Image(painterResource(iconId), null, Modifier.size(sizeApp.iconSize / 2))
+            Image(painterResource(iconId), null, Modifier.size(sizeApp.iconSize / 4))
         } else {
-            Image(painterResource(iconId), null, Modifier.size(sizeApp.iconSize / 2))
+            Image(painterResource(iconId), null, Modifier.size(sizeApp.iconSize / 4))
             Text(label, style = MaterialTheme.typography.labelSmall, color = Color.Black)
         }
     }

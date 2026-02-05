@@ -35,10 +35,16 @@ fun NpcSelect(npcViewModel: NpcViewModel, idMapUser: Int, onClick: (id: Int) -> 
 
         val page = remember { mutableIntStateOf(1) }
         val npcSelectList = remember { mutableStateListOf<Int>() }
+        val isLoading = remember { mutableStateOf(true) }
 
         LaunchedEffect(listNpc) {
-                val idList = listNpc.value.map { it.id }
-                npcViewModel.loadNpcAssignByNpcIdList(idList)
+            val idList = listNpc.value.map { it.id }
+            npcViewModel.loadNpcAssignByNpcIdList(idList)
+            isLoading.value = false
+        }
+        LaunchedEffect(listNpcAssign) {
+            println("+++++++++++++++ $listNpcAssign")
+
         }
         LaunchedEffect(Unit) { npcViewModel.loadNpcAbilityList(page.intValue, 20) }
         Box(
@@ -178,7 +184,7 @@ fun NpcSelect(npcViewModel: NpcViewModel, idMapUser: Int, onClick: (id: Int) -> 
                                                                 contentDescription = "Farmer",
                                                                 modifier =
                                                                         Modifier.size(
-                                                                                sizeApp.iconSize
+                                                                                sizeApp.iconSize*0.4f
                                                                         )
                                                         )
                                                         Box(
@@ -212,7 +218,8 @@ fun NpcSelect(npcViewModel: NpcViewModel, idMapUser: Int, onClick: (id: Int) -> 
                                                                 Arrangement.SpaceBetween,
                                                 ) { npcBattleList.forEach { TickAbility(it) } }
                                         }
-                                }
+                                } 
+                                
                         }
                 }
                 Row(
@@ -301,6 +308,13 @@ fun NpcSelect(npcViewModel: NpcViewModel, idMapUser: Int, onClick: (id: Int) -> 
                         ) { Box() { Text("X") } }
                 }
         }
+    if(isLoading.value)
+        Box(
+            modifier = Modifier.fillMaxSize().background(Color.White)
+        ){
+            CircularProgressIndicator()
+        }
+
 }
 
 @Composable
