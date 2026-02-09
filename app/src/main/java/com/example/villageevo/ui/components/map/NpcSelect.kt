@@ -31,21 +31,10 @@ fun NpcSelect(npcViewModel: NpcViewModel, idMapUser: Int, onClick: (id: Int) -> 
         val screenHeight = sizeApp.screenHeight
 
         val listNpc = npcViewModel.getNpcAbilityList.collectAsStateWithLifecycle()
-        val listNpcAssign = npcViewModel.getNpcAssign.collectAsStateWithLifecycle()
 
         val page = remember { mutableIntStateOf(1) }
         val npcSelectList = remember { mutableStateListOf<Int>() }
-        val isLoading = remember { mutableStateOf(true) }
 
-        LaunchedEffect(listNpc) {
-            val idList = listNpc.value.map { it.id }
-            npcViewModel.loadNpcAssignByNpcIdList(idList)
-            isLoading.value = false
-        }
-        LaunchedEffect(listNpcAssign) {
-            println("+++++++++++++++ $listNpcAssign")
-
-        }
         LaunchedEffect(Unit) { npcViewModel.loadNpcAbilityList(page.intValue, 20) }
         Box(
                 modifier =
@@ -79,8 +68,8 @@ fun NpcSelect(npcViewModel: NpcViewModel, idMapUser: Int, onClick: (id: Int) -> 
                                                                 level = npc.farmer
                                                         ),
                                                         NpcMapAbility(
-                                                                name = NpcAbility.CARPENTER,
-                                                                level = npc.carpenter
+                                                                name = NpcAbility.WOODER,
+                                                                level = npc.wooder
                                                         ),
                                                         NpcMapAbility(
                                                                 name = NpcAbility.MINER,
@@ -106,9 +95,6 @@ fun NpcSelect(npcViewModel: NpcViewModel, idMapUser: Int, onClick: (id: Int) -> 
                                                                 level = npc.calvary
                                                         ),
                                                 )
-                                        val npcAssign =
-                                                listNpcAssign.value.find { it.idNpc == npc.id }
-                                        val idMapAssign = npcAssign?.idMapUser?.toString() ?: ""
                                         Box(
                                                 modifier =
                                                         Modifier.height(screenHeight * 0.4f)
@@ -158,8 +144,7 @@ fun NpcSelect(npcViewModel: NpcViewModel, idMapUser: Int, onClick: (id: Int) -> 
                                                                                                         .primary
                                                                                 )
                                                         ) {
-                                                                Text(
-                                                                        idMapAssign,
+                                                                Text(npc.idMapUser.toString(),
                                                                         style =
                                                                                 MaterialTheme
                                                                                         .typography
@@ -305,14 +290,8 @@ fun NpcSelect(npcViewModel: NpcViewModel, idMapUser: Int, onClick: (id: Int) -> 
                                                 disabledContainerColor = Color.Transparent
                                         ),
                                 shape = RoundedCornerShape(sizeApp.paddingSmall)
-                        ) { Box() { Text("X") } }
+                        ) { Box() { Text("Exit Map ${idMapUser}") } }
                 }
-        }
-    if(isLoading.value)
-        Box(
-            modifier = Modifier.fillMaxSize().background(Color.White)
-        ){
-            CircularProgressIndicator()
         }
 
 }
@@ -323,7 +302,7 @@ fun TickAbility(ability: NpcMapAbility) {
         val colorTick: Color =
                 when (ability.name) {
                         NpcAbility.FARMER -> ColorApp.GreenV10
-                        NpcAbility.CARPENTER -> ColorApp.BrownV10
+                        NpcAbility.WOODER -> ColorApp.BrownV10
                         NpcAbility.MINER -> ColorApp.GoldV10
                         NpcAbility.INFANTRY -> ColorApp.RedV10
                         NpcAbility.ARCHER -> ColorApp.BlueV10

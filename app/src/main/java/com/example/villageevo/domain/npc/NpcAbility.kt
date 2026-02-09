@@ -2,7 +2,7 @@ package com.example.villageevo.domain.npc
 
 enum class NpcAbility {
     FARMER,
-    CARPENTER,
+    WOODER,
     MINER,
 
     INFANTRY,

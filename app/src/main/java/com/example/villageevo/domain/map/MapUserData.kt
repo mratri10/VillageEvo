@@ -15,7 +15,7 @@ data class MapDataEntity(
         @PrimaryKey val id: Int,
         val idMap: Int,
         val name: String,
-        val value: Int,
+        val value: Double,
         val x: Int,
         val y: Int,
 )

@@ -4,15 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.villageevo.domain.building.BuildDataEntity
-import com.example.villageevo.domain.building.BuildEvoEntity
-import com.example.villageevo.domain.building.MapBuildEntity
-import com.example.villageevo.domain.map.MapDataEntity
-import com.example.villageevo.domain.map.MapMetaDataEntity
-import com.example.villageevo.domain.map.MapResourceEntity
-import com.example.villageevo.domain.npc.NpcAbilityEntity
-import com.example.villageevo.domain.npc.NpcAssignEntity
-import com.example.villageevo.domain.npc.NpcEntity
+import com.example.villageevo.domain.building.*
+import com.example.villageevo.domain.map.*
+import com.example.villageevo.domain.npc.*
 
 @Database(
         entities =
@@ -20,13 +14,13 @@ import com.example.villageevo.domain.npc.NpcEntity
                         MapMetaDataEntity::class,
                         MapResourceEntity::class,
                         MapDataEntity::class,
-                        BuildEvoEntity::class,
+                        SourceEntity::class,
                         BuildDataEntity::class,
                         MapBuildEntity::class,
                         NpcEntity::class,
                         NpcAbilityEntity::class,
                         NpcAssignEntity::class],
-        version = 7,
+        version = 9,
         exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

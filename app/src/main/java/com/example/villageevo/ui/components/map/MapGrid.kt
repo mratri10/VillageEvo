@@ -10,13 +10,14 @@ import androidx.compose.ui.Modifier
 import com.example.villageevo.R
 import com.example.villageevo.domain.building.BuildingType
 import com.example.villageevo.domain.map.MapDataEntity
+import com.example.villageevo.domain.map.MapDataWorker
 import com.example.villageevo.util.LocalSizeApp
 
 @Composable
 fun MapGrid(
         type: BuildingType,
         modifier: Modifier = Modifier,
-        data: MapDataEntity,
+        data: MapDataWorker,
         onClick: (id: Int) -> Unit = {}
 ) {
     val sizeApp = LocalSizeApp.current
@@ -43,7 +44,7 @@ fun MapGrid(
                 widthForest,
                 heightForest,
                 R.drawable.tree,
-                0,
+                data.worker,
                 data.id
             )
             BuildingType.WILD -> SourceArea(
@@ -53,7 +54,7 @@ fun MapGrid(
                 widthWild,
                 heightWild,
                 R.drawable.deer,
-                0,
+                data.worker,
                 data.id
             )
             else ->Text("Unknown")

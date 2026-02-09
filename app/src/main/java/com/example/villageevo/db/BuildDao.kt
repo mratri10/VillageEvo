@@ -2,15 +2,13 @@ package com.example.villageevo.db
 
 import androidx.room.Dao
 import androidx.room.Insert
-import com.example.villageevo.domain.building.BuildDataEntity
-import com.example.villageevo.domain.building.BuildEvoEntity
-import com.example.villageevo.domain.building.MapBuildEntity
+import com.example.villageevo.domain.building.*
 
 @Dao
 interface BuildDao {
 
     @Insert
-    suspend fun insertBuildEvo(buildEvo: BuildEvoEntity): Long
+    suspend fun insertSource(source: SourceEntity): Long
 
     @Insert
     suspend fun insertBuildData(buildData: BuildDataEntity): Long

@@ -25,14 +25,21 @@ fun MapScreen(mapViewModel: MapViewModel, npcViewModel: NpcViewModel) {
     val isShowBuild = remember { mutableStateOf(false) }
     val sizeApp = LocalSizeApp.current
 
+    val npcTotalList by npcViewModel.getTotalNpc.collectAsStateWithLifecycle()
+
     val userData by mapViewModel.getUserData.collectAsStateWithLifecycle()
     val userMeta by mapViewModel.getUserMeta.collectAsStateWithLifecycle()
-    val countNpc by npcViewModel.countNpc.collectAsStateWithLifecycle()
+
+    val potentialData by mapViewModel.getPotential.collectAsStateWithLifecycle()
 
     val gridMap = remember(userData) { userData.associateBy { "${it.y}_${it.x}" } }
     val idMapSelect = remember { mutableIntStateOf(0) }
 
-    LaunchedEffect(Unit) { npcViewModel.loadNpcList() }
+    LaunchedEffect(Unit) {
+        npcViewModel.loadNpcList() }
+    LaunchedEffect(idMapSelect.value){
+        mapViewModel.dataMapUserById(userMeta.id)
+    }
 
     Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
         Image(
@@ -102,11 +109,20 @@ fun MapScreen(mapViewModel: MapViewModel, npcViewModel: NpcViewModel) {
             }
             // Sidebar atau Panel Detail
             Box(modifier = Modifier.weight(1f).fillMaxHeight().background(Color.Black)) {
-                IndicatorMap(userMeta = userMeta, countNpc)
+                IndicatorMap(
+                    userMeta = userMeta,
+                    listTotalNpc=npcTotalList,
+                    potentialData,
+                    {
+                        mapViewModel.turnProcess()
+                    }
+                )
             }
         }
         if (isShowBuild.value) {
-            BuildArea(onClick = { isShowBuild.value = false })
+            BuildArea(onClick = {
+                isShowBuild.value = false
+            })
         }
         if (idMapSelect.value > 0) {
             Box(

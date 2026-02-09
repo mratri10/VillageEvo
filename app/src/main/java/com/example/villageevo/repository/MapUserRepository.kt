@@ -2,10 +2,14 @@ package com.example.villageevo.repository
 
 import androidx.room.Transaction
 import com.example.villageevo.db.MapUserDao
+import com.example.villageevo.domain.building.SourceEntity
 import com.example.villageevo.domain.map.MapDataEntity
+import com.example.villageevo.domain.map.MapDataWorker
 import com.example.villageevo.domain.map.MapMetaData
 import com.example.villageevo.domain.map.MapMetaDataEntity
 import com.example.villageevo.domain.map.MapResourceEntity
+import com.example.villageevo.domain.map.PotentialData
+import com.example.villageevo.util.AbilitySource
 
 class MapUserRepository(
     private val mapUserDao: MapUserDao
@@ -47,16 +51,31 @@ class MapUserRepository(
             print("Failed when save data: $e")
         }
     }
+
+    @Transaction
+    suspend fun turnProcess(data: List<SourceEntity>, mapDataEntity: List<MapDataEntity>){
+        mapUserDao.insertAllSource(data)
+        mapUserDao.updateMapUserAllData(mapDataEntity)
+    }
     suspend fun getMapUserResource(idMap:Int): List<MapResourceEntity>{
         return mapUserDao.getUserResource(idMap)
     }
-    suspend fun getMapUserData(idMap:Int): List<MapDataEntity>{
+    suspend fun getMapUserData(idMap:Int): List<MapDataWorker>{
         return mapUserDao.getUserData(idMap)
     }
     suspend fun getMapMetaUser(id:Int): MapMetaDataEntity{
         val data =  mapUserDao.getUserMeta(id)
-        if(data.isNotEmpty()) return data.first()
-        else return MapMetaDataEntity(0,"","")
+        return if(data.isNotEmpty()) data.first()
+        else MapMetaDataEntity(0,"","")
     }
-
+    suspend fun getPotentialSource():List<PotentialData>{
+        return mapUserDao.getPotentialSource(
+            forestVal = AbilitySource.forest.convert,
+            wildVal = AbilitySource.wild.convert,
+            farmVal = AbilitySource.farm.convert,
+            stoneVal = AbilitySource.stone.convert,
+            goldVal = AbilitySource.gold.convert,
+            ironVal = AbilitySource.iron.convert
+        )
+    }
 }

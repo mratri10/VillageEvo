@@ -6,6 +6,7 @@ import com.example.villageevo.domain.npc.NpcAbilityEntity
 import com.example.villageevo.domain.npc.NpcAssignEntity
 import com.example.villageevo.domain.npc.NpcEntity
 import com.example.villageevo.domain.npc.NpcMap
+import com.example.villageevo.domain.npc.TotalNpcAssign
 
 class NpcRepository(private val npcDao: NpcDao){
 
@@ -23,8 +24,8 @@ class NpcRepository(private val npcDao: NpcDao){
         npcDao.insertNpcAssign(npcAssignList)
     }
 
-    suspend fun countNpc(): Int{
-        return npcDao.countNpc()
+    suspend fun getNpcCount(): List<TotalNpcAssign>{
+        return npcDao.getTotalNpcAssign()
     }
 
     suspend fun getNpcAbility(
@@ -53,10 +54,6 @@ class NpcRepository(private val npcDao: NpcDao){
             filterCalvary,
             filterSpearman
         )
-    }
-
-    suspend fun getNpcAssign(npcList:List<Int>): List<NpcAssignEntity> {
-        return npcDao.getNpcAssign(npcList)
     }
 
 }

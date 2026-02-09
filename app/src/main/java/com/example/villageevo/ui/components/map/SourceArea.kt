@@ -21,11 +21,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.example.villageevo.R
 import com.example.villageevo.util.LocalSizeApp
+import kotlin.math.abs
+import kotlin.math.round
 
 @Composable
 fun SourceArea(
     modifier: Modifier = Modifier,
-    sum: Int = 0,
+    sum: Double = 0.0,
     imageSource:Int,
     widthSource: Float,
     heightSource: Float,
@@ -51,20 +53,7 @@ fun SourceArea(
                 modifier = Modifier.fillMaxWidth().padding(sizeApp.paddingSmall),
                 horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            ResourceBadge(label = "$sum", iconId = iconMap, color = Color.Cyan)
-            Box(
-                modifier =
-                    Modifier.background(
-                        MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(sizeApp.paddingSmall)
-                    )
-                        .padding(sizeApp.paddingSmall/2)
-            ) {
-                Text(
-                    id.toString(),
-                    style = MaterialTheme.typography.labelSmall.copy(color = Color.White)
-                )
-            }
+            ResourceBadge(label = "${round(sum).toInt()}", iconId = iconMap, color = Color.Cyan)
             ResourceBadge(label = "$worker", iconId = R.drawable.farmer, color = Color.Green)
         }
     }

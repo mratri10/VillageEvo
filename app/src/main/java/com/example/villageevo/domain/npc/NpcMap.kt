@@ -17,3 +17,8 @@ data class NpcMap(
     @ColumnInfo(name = "last_na_id") // This is the fix!
     val lastNaId: Int?,
 )
+
+data class TotalNpcAssign(
+    val name:String,
+    val value:Int
+)

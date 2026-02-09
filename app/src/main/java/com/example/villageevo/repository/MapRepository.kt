@@ -28,7 +28,7 @@ class MapRepository(private val context: Context) {
                     it["id"]!!.toInt(),
                     it["id_map"]!!.toInt(),
                     it["name"]!!,
-                    it["value"]!!.toInt(),
+                    it["value"]!!.toDouble(),
                     it["x"]!!.toInt(),
                     it["y"]!!.toInt()
                 )

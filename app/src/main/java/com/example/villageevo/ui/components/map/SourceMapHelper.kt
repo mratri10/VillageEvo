@@ -4,7 +4,7 @@ import com.example.villageevo.R
 import kotlin.compareTo
 
 object SourceMapHelper {
-    fun forestImage(sum:Int):Int{
+    fun forestImage(sum:Double):Int{
         val imageSource =
             when {
                 sum < 60 -> R.drawable.forest_l1
@@ -15,7 +15,7 @@ object SourceMapHelper {
             }
         return imageSource
     }
-    fun forestWidth(sum:Int): Float{
+    fun forestWidth(sum:Double): Float{
         val widthSource =
             when {
                 sum < 60 -> 2 / 5f
@@ -27,7 +27,7 @@ object SourceMapHelper {
             }
         return widthSource
     }
-    fun forestHeight(sum:Int): Float{
+    fun forestHeight(sum: Double): Float{
         val heightSource =
             when {
                 sum < 60 -> 3 / 5f
@@ -40,7 +40,7 @@ object SourceMapHelper {
         return heightSource
     }
 
-    fun wildImage(sum:Int):Int{
+    fun wildImage(sum:Double):Int{
         val imageSource =
             when {
                 sum < 60 -> R.drawable.wild_l1

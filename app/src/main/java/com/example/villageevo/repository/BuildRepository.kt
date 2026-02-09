@@ -5,15 +5,15 @@ import androidx.room.PrimaryKey
 import androidx.room.Transaction
 import com.example.villageevo.db.BuildDao
 import com.example.villageevo.domain.building.BuildDataEntity
-import com.example.villageevo.domain.building.BuildEvoEntity
 import com.example.villageevo.domain.building.MapBuildEntity
+import com.example.villageevo.domain.building.SourceEntity
 
 class BuildRepository(private val buildDao: BuildDao){
 
     @Transaction
-    suspend fun saveBuildEvo(buildEvo: BuildEvoEntity){
+    suspend fun saveSource(source: SourceEntity){
         try {
-            buildDao.insertBuildEvo(buildEvo)
+            buildDao.insertSource(source)
         }catch (e:Exception){
             print("Failed when save data: $e")
         }

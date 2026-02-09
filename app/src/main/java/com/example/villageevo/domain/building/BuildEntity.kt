@@ -19,15 +19,18 @@ data class BuildDataEntity(
     var level:Int,
 )
 
-@Entity("build_evo")
-data class BuildEvoEntity(
+@Entity("source")
+data class SourceEntity(
     @PrimaryKey val id: Int,
-    var year:Int,
-    var npc: Int,
-    var wood: Int,
-    var food: Int,
-    var gold: Int,
-    var iron: Int,
-    var rock: Int,
+    var params: BuildEvoParams  ,
+    var value: Int,
 )
-
+enum class BuildEvoParams{
+    FOOD,
+    WOOD,
+    GOLD,
+    IRON,
+    TURN,
+    POPULATION,
+    STONE
+}
