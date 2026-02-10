@@ -2,6 +2,7 @@ package com.example.villageevo.repository
 
 import androidx.room.Transaction
 import com.example.villageevo.db.MapUserDao
+import com.example.villageevo.domain.building.BuildEvoParams
 import com.example.villageevo.domain.building.SourceEntity
 import com.example.villageevo.domain.map.MapDataEntity
 import com.example.villageevo.domain.map.MapDataWorker
@@ -54,6 +55,9 @@ class MapUserRepository(
 
     @Transaction
     suspend fun turnProcess(sources: List<SourceEntity>, maps: List<MapDataEntity>){
+        mapUserDao.insertAllSource(listOf(
+            SourceEntity(id = 0, params = BuildEvoParams.TURN, value = 1)
+        ))
         mapUserDao.runTurnTransaction(sources, maps)
     }
     suspend fun getMapUserResource(idMap:Int): List<MapResourceEntity>{

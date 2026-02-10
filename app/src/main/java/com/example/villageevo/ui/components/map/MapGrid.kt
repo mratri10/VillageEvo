@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.villageevo.R
 import com.example.villageevo.domain.building.BuildingType
-import com.example.villageevo.domain.map.MapDataEntity
 import com.example.villageevo.domain.map.MapDataWorker
 import com.example.villageevo.util.LocalSizeApp
 

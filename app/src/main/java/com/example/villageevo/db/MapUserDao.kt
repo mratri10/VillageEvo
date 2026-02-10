@@ -22,15 +22,21 @@ interface MapUserDao {
     @Insert
     suspend fun insertAllUserResources(data: List<MapResourceEntity>)
 
-    @Insert
-    suspend fun insertAllSource(data: List<SourceEntity>)
-
+    @Query("UPDATE source SET value = value + :newValue WHERE params = :name")
+    suspend fun updateResource(name: String, newValue: Int):Int
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertResource(source: SourceEntity): Long
     @Update
     suspend fun updateMapUserAllData(data: List<MapDataEntity>)
 
     @Transaction
     suspend fun runTurnTransaction(sources: List<SourceEntity>, mapUpdates: List<MapDataEntity>) {
-        insertAllSource(sources)
+        sources.forEach{
+            val rowsUpdated = updateResource(it.params.toString(), it.value)
+            if (rowsUpdated == 0) {
+                insertResource(SourceEntity(params = it.params, value = it.value))
+            }
+        }
         updateMapUserAllData(mapUpdates)
     }
     @Query("SELECT COUNT(DISTINCT idNpc) FROM npc_assign")
@@ -51,6 +57,16 @@ interface MapUserDao {
 
     @Query("""
         SELECT mud.id as idMap,mud.name,
+        (CASE 
+            WHEN mud.name = 'forest' THEN mud.value * :forestVal
+            WHEN mud.name = 'wild' THEN mud.value * :wildVal
+            WHEN mud.name = 'farm' THEN mud.value * :farmVal
+            WHEN mud.name = 'stone' THEN mud.value * :stoneVal
+            WHEN mud.name = 'gold' THEN mud.value * :goldVal
+            WHEN mud.name = 'iron' THEN mud.value * :ironVal
+            ELSE 0
+        END
+        ) totalSource,
         SUM(CASE 
             WHEN mud.name = 'forest' THEN :forestVal
             WHEN mud.name = 'wild'   THEN :wildVal

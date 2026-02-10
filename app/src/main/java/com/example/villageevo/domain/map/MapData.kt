@@ -11,6 +11,7 @@ data class MapMetaData (
 data class PotentialData(
     val name:String,
     val totalValue:Int,
+    val totalSource:Int,
     val idMap:Int
 )
 

@@ -70,13 +70,16 @@ fun IndicatorMap(
         }
         Box(modifier = Modifier.weight(1f))
         Column {
-            potentialData.map {
+            potentialData.groupBy { it.name }.map {(name, items)->
+                val sumTotal = items.sumOf {
+                    if(it.totalValue>it.totalSource) it.totalSource else it.totalValue
+                }
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text(text = it.name, style = MaterialTheme.typography.labelSmall.copy(
+                    Text(text = name, style = MaterialTheme.typography.labelSmall.copy(
                         color = Color.White
                     ))
-                    Text(text = it.totalValue.toString(), style = MaterialTheme.typography.labelSmall.copy(
+                    Text(text = sumTotal.toString(), style = MaterialTheme.typography.labelSmall.copy(
                         color = Color.White
                     ))
                 }

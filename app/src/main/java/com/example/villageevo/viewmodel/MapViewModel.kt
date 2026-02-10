@@ -73,11 +73,14 @@ class MapViewModel(private val repository: MapUserRepository): ViewModel(){
         try {
             val potentialMap = potentialData.associateBy { it.idMap }
 
-            val sourceList = potentialData.map { data ->
+            val sourceList = potentialData.groupBy { it.name }.map { (name, items) ->
+                val sumTotal = items.sumOf {
+                    if(it.totalValue>it.totalSource) it.totalSource else it.totalValue
+                }
                 SourceEntity(
                     id = 0,
-                    params = mapNameToParam(data.name),
-                    value = data.totalValue
+                    params = mapNameToParam(name),
+                    value = sumTotal
                 )
             }
             val mapDataEntities = mapData.map { worker ->
@@ -87,11 +90,13 @@ class MapViewModel(private val repository: MapUserRepository): ViewModel(){
                 val newValue = if (potential != null && convertAbility > 0) {
                     val calculatedValue = worker.value - (potential.totalValue.toDouble() / convertAbility)
                     maxOf(0.0, calculatedValue)
-                } else {
+                }
+                else {
                     worker.value
                 }
                 worker.toMapDataEntity(newValue)
             }
+
             viewModelScope.launch ( Dispatchers.IO){
                 repository.turnProcess(sourceList, mapDataEntities)
                 dataMapUserById(getUserMeta.value.id)

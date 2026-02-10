@@ -1,6 +1,7 @@
 package com.example.villageevo.domain.building
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity("map_build")
@@ -19,7 +20,9 @@ data class BuildDataEntity(
     var level:Int,
 )
 
-@Entity("source")
+@Entity("source",
+    indices = [Index(value=["params"], unique = true)]
+)
 data class SourceEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int=0,
