@@ -2,7 +2,9 @@ package com.example.villageevo.db
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.example.villageevo.domain.building.SourceEntity
 import com.example.villageevo.domain.map.MapDataEntity
@@ -26,6 +28,14 @@ interface MapUserDao {
     @Update
     suspend fun updateMapUserAllData(data: List<MapDataEntity>)
 
+    @Transaction
+    suspend fun runTurnTransaction(sources: List<SourceEntity>, mapUpdates: List<MapDataEntity>) {
+        insertAllSource(sources)
+        updateMapUserAllData(mapUpdates)
+    }
+    @Query("SELECT COUNT(DISTINCT idNpc) FROM npc_assign")
+    suspend fun getGlobalWorkerCount(): Int
+
     @Query("SELECT * FROM map_user_metadata WHERE id = :id")
     suspend fun getUserMeta(id: Int): List<MapMetaDataEntity>
     @Query("SELECT * FROM map_user_resource WHERE idMap = :idMap")
@@ -33,11 +43,7 @@ interface MapUserDao {
     @Query("""
         SELECT mud.*,COUNT(na.idNpc)as worker
             FROM map_user_data mud
-        LEFT JOIN (
-            SELECT idNpc, idMapUser, id FROM npc_assign
-                WHERE id IN (
-                    SELECT MAX(id) FROM npc_assign GROUP BY idNpc)
-        )na ON na.idMapUser = mud.id
+        LEFT JOIN npc_assign na ON na.idMapUser = mud.id
             WHERE idMap = :idMap
             GROUP BY mud.id
     """)
@@ -45,31 +51,28 @@ interface MapUserDao {
 
     @Query("""
         SELECT mud.id as idMap,mud.name,
-        SUM(
-            CASE 
-                WHEN mud.name = "forest" AND nb.idAbility = 1 THEN (nb.level +1)*:forestVal
-                WHEN mud.name = "wild" AND nb.idAbility = 2 THEN (nb.level +1)*:wildVal
-                WHEN mud.name = "farm" AND nb.idAbility = 2 THEN (nb.level +1)*:farmVal
-                WHEN mud.name = "stone" AND nb.idAbility = 3 THEN (nb.level +1)*:stoneVal
-                WHEN mud.name = "gold" AND nb.idAbility = 3 THEN (nb.level +1)*:goldVal
-                WHEN mud.name = "iron" AND nb.idAbility = 3 THEN (nb.level +1)*:ironVal
-            ELSE 10 END
-        ) AS totalValue
+        SUM(CASE 
+            WHEN mud.name = 'forest' THEN :forestVal
+            WHEN mud.name = 'wild'   THEN :wildVal
+            WHEN mud.name = 'farm'   THEN :farmVal
+            WHEN mud.name = 'stone'  THEN :stoneVal
+            WHEN mud.name = 'gold'   THEN :goldVal
+            WHEN mud.name = 'iron'   THEN :ironVal
+            ELSE 0 
+        END) + 
+        (CASE 
+            WHEN mud.name = 'forest' AND nb.idAbility = 1 THEN nb.level * :forestVal
+            WHEN mud.name = 'wild'   AND nb.idAbility = 2 THEN nb.level * :wildVal
+            WHEN mud.name = 'farm'   AND nb.idAbility = 2 THEN nb.level * :farmVal
+            WHEN mud.name = 'stone'  AND nb.idAbility = 3 THEN nb.level * :stoneVal
+            WHEN mud.name = 'gold'   AND nb.idAbility = 3 THEN nb.level * :goldVal
+            WHEN mud.name = 'iron'   AND nb.idAbility = 3 THEN nb.level * :ironVal
+            ELSE 0
+        END
+        ) totalValue
         FROM map_user_data mud
-        JOIN (
-            SELECT idNpc, idMapUser, id AS last_npc_assign
-            FROM npc_assign
-            WHERE id IN (SELECT MAX(id) FROM npc_assign GROUP BY idNpc)
-        )na ON na.idMapUser = mud.id
+        JOIN npc_assign na ON na.idMapUser = mud.id
         LEFT JOIN npc_ability nb ON na.idNpc = nb.idNpc
-        AND(
-            (mud.name = 'forest' AND nb.idAbility = 1)OR
-            (mud.name = 'wild' AND nb.idAbility =2)OR
-            (mud.name = 'farm' AND nb.idAbility =2)OR
-            (mud.name = 'stone' AND nb.idAbility =3)OR
-            (mud.name = 'iron' AND nb.idAbility =3)OR
-            (mud.name = 'gold' AND nb.idAbility =3)
-        )
         GROUP BY mud.id
     """)
     suspend fun getPotentialSource(forestVal: Int,

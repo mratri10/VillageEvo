@@ -53,9 +53,8 @@ class MapUserRepository(
     }
 
     @Transaction
-    suspend fun turnProcess(data: List<SourceEntity>, mapDataEntity: List<MapDataEntity>){
-        mapUserDao.insertAllSource(data)
-        mapUserDao.updateMapUserAllData(mapDataEntity)
+    suspend fun turnProcess(sources: List<SourceEntity>, maps: List<MapDataEntity>){
+        mapUserDao.runTurnTransaction(sources, maps)
     }
     suspend fun getMapUserResource(idMap:Int): List<MapResourceEntity>{
         return mapUserDao.getUserResource(idMap)
@@ -63,11 +62,7 @@ class MapUserRepository(
     suspend fun getMapUserData(idMap:Int): List<MapDataWorker>{
         return mapUserDao.getUserData(idMap)
     }
-    suspend fun getMapMetaUser(id:Int): MapMetaDataEntity{
-        val data =  mapUserDao.getUserMeta(id)
-        return if(data.isNotEmpty()) data.first()
-        else MapMetaDataEntity(0,"","")
-    }
+    suspend fun getMapMetaUser(id:Int)=mapUserDao.getUserMeta(id).firstOrNull()
     suspend fun getPotentialSource():List<PotentialData>{
         return mapUserDao.getPotentialSource(
             forestVal = AbilitySource.forest.convert,

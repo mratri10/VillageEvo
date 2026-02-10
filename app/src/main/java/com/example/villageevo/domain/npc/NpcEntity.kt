@@ -19,7 +19,7 @@ data class NpcAbilityEntity(
 
 @Entity("npc_assign")
 data class NpcAssignEntity(
-        @PrimaryKey(autoGenerate = true) val id: Int = 0,
+        @PrimaryKey
         val idNpc: Int,
         val idMapUser: Int,
 )

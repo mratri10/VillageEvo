@@ -20,7 +20,7 @@ import com.example.villageevo.domain.npc.*
                         NpcEntity::class,
                         NpcAbilityEntity::class,
                         NpcAssignEntity::class],
-        version = 9,
+        version = 10,
         exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

@@ -30,10 +30,7 @@ interface NpcDao {
         SELECT 'totalNpc' As name, COUNT(n.id) AS value FROM npc N
         UNION ALL
         SELECT 'totalNpcWork' As name, COUNT(na.idNpc) AS value FROM npc n
-        LEFT JOIN(
-            SELECT idNpc from npc_assign
-            WHERE id IN (SELECT MAX(id) FROM npc_assign GROUP BY idNpc)
-        )na ON na.idNpc = n.id
+        LEFT JOIN npc_assign na ON na.idNpc = n.id
         WHERE na.idNpc IS NOT NULL
     """)
     suspend fun getTotalNpcAssign(): List<TotalNpcAssign>
@@ -41,8 +38,7 @@ interface NpcDao {
     @Query(
             """
     SELECT n.id, n.year, 
-        na.idMapUser as idMapUser,  
-        na.last_na_id,
+        na.idMapUser as idMapUser,
         MAX(CASE WHEN nb.idAbility = 1 THEN nb.level ELSE 0 END) AS wooder,
         MAX(CASE WHEN nb.idAbility = 2 THEN nb.level ELSE 0 END) AS farmer,
         MAX(CASE WHEN nb.idAbility = 3 THEN nb.level ELSE 0 END) AS miner,
@@ -51,16 +47,9 @@ interface NpcDao {
         MAX(CASE WHEN nb.idAbility = 6 THEN nb.level ELSE 0 END) AS calvary,
         MAX(CASE WHEN nb.idAbility = 7 THEN nb.level ELSE 0 END) AS spearman
     FROM npc n
-    LEFT JOIN (
-        SELECT idNpc, idMapUser, id as last_na_id
-        FROM npc_assign
-        WHERE id IN (
-            SELECT MAX(id)
-            FROM npc_assign
-            GROUP BY idNpc)
-        ) na on n.id = na.idNpc
+    LEFT JOIN npc_assign na on n.id = na.idNpc
     LEFT JOIN npc_ability nb ON n.id = nb.idNpc
-    GROUP BY n.id, n.year, na.idMapUser, na.last_na_id
+    GROUP BY n.id, n.year, na.idMapUser
     HAVING
         (:filterWoodier = 1 AND wooder > 0 OR :filterWoodier = 0) AND
         (:filterFarmer = 1 AND farmer > 0 OR :filterFarmer = 0) AND

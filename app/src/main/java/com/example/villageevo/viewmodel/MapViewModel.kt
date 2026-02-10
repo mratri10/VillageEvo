@@ -42,65 +42,91 @@ class MapViewModel(private val repository: MapUserRepository): ViewModel(){
             repository.saveToMapUserResource(mapMetaUser, mapResourceList, mapDataList)
         }
     }
-    fun dataMapUserById(id:Int){
-        try {
-            viewModelScope.launch (Dispatchers.IO ){
-                _getUserResource.value = repository.getMapUserResource(id)
-                _getUserData.value = repository.getMapUserData(id)
-                _getUserMeta.value = repository.getMapMetaUser(id)
-                _getPotential.value = repository.getPotentialSource()
+    fun dataMapUserById(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val resource = repository.getMapUserResource(id)
+                val data = repository.getMapUserData(id)
+                val potential = repository.getPotentialSource()
+
+                // Ambil data meta, jika null jangan dipaksa (!!), gunakan default
+                val meta = repository.getMapMetaUser(id)
+
+                // Update state secara aman
+                _getUserResource.value = resource
+                _getUserData.value = data
+                _getPotential.value = potential
+
+                if (meta != null) {
+                    _getUserMeta.value = meta
+                } else {
+                    // Opsional: Log atau set ke meta kosong jika data tidak ditemukan
+                    android.util.Log.w("MapViewModel", "Metadata untuk ID $id tidak ditemukan")
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("MapViewModel", "Error loading data: ${e.message}")
             }
-        }catch (e: Exception){
-            e.printStackTrace()
         }
     }
 
     fun turnProcess(potentialData: List<PotentialData>, mapData:List<MapDataWorker>){
         try {
-            val sourceList=potentialData.map {data ->
+            val potentialMap = potentialData.associateBy { it.idMap }
+
+            val sourceList = potentialData.map { data ->
                 SourceEntity(
-                    id=0,
-                    params = when(data.name.lowercase()){
-                        "forest" -> BuildEvoParams.WOOD
-                        "wild" -> BuildEvoParams.FOOD
-                        "farm" -> BuildEvoParams.FOOD
-                        "stone" -> BuildEvoParams.STONE
-                        "gold" -> BuildEvoParams.GOLD
-                        "iron" -> BuildEvoParams.IRON
-                        else -> BuildEvoParams.TURN
-                    },
+                    id = 0,
+                    params = mapNameToParam(data.name),
                     value = data.totalValue
                 )
             }
-            val mapDataList = mapData.map{data->
-                val potential = potentialData.find { it.idMap == data.id }
-                val convertAbility = when(data.name.lowercase()){
-                    "forest" -> AbilitySource.forest.convert
-                    "wild" -> AbilitySource.wild.convert
-                    "farm" -> AbilitySource.farm.convert
-                    "stone" -> AbilitySource.stone.convert
-                    "gold" -> AbilitySource.gold.convert
-                    "iron" -> AbilitySource.iron.convert
-                    else -> 0
+            val mapDataEntities = mapData.map { worker ->
+                val potential = potentialMap[worker.id]
+                val convertAbility = getAbilityConvertValue(worker.name)
+
+                val newValue = if (potential != null && convertAbility > 0) {
+                    val calculatedValue = worker.value - (potential.totalValue.toDouble() / convertAbility)
+                    maxOf(0.0, calculatedValue)
+                } else {
+                    worker.value
                 }
-
-                MapDataEntity(
-                    id = data.id,
-                    idMap = data.idMap,
-                    name = data.name,
-                    x = data.x,
-                    y = data.y,
-                    value = if(potential==null) data.value
-                    else data.value-(potential.totalValue.toDouble()/convertAbility)
-                )
+                worker.toMapDataEntity(newValue)
             }
-
             viewModelScope.launch ( Dispatchers.IO){
-                repository.turnProcess(sourceList, mapDataList)
+                repository.turnProcess(sourceList, mapDataEntities)
+                dataMapUserById(getUserMeta.value.id)
             }
+
         }catch (e: Exception){
             print("Failed when save data: $e")
         }
     }
 
+}
+
+// Helper to keep logic clean
+private fun mapNameToParam(name: String) = when (name.lowercase()) {
+    "forest" -> BuildEvoParams.WOOD
+    "farm", "wild" -> BuildEvoParams.FOOD
+    "stone" -> BuildEvoParams.STONE
+    "gold" -> BuildEvoParams.GOLD
+    "iron" -> BuildEvoParams.IRON
+    else -> BuildEvoParams.TURN
+}
+
+private fun getAbilityConvertValue(name: String) = when (name.lowercase()) {
+    "forest" -> AbilitySource.forest.convert
+    "wild", "farm" -> AbilitySource.wild.convert
+    "stone", "gold", "iron" -> AbilitySource.stone.convert
+    else -> 0
+}
+private fun MapDataWorker.toMapDataEntity(newValue: Double): MapDataEntity {
+    return MapDataEntity(
+        id = this.id,
+        idMap = this.idMap,
+        name = this.name,
+        x = this.x,
+        y = this.y,
+        value = newValue
+    )
 }

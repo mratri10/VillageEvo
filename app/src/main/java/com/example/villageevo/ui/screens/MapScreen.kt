@@ -114,7 +114,7 @@ fun MapScreen(mapViewModel: MapViewModel, npcViewModel: NpcViewModel) {
                     listTotalNpc=npcTotalList,
                     potentialData,
                     {
-                        mapViewModel.turnProcess()
+                        mapViewModel.turnProcess(potentialData, userData)
                     }
                 )
             }

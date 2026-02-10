@@ -57,7 +57,7 @@ class NpcViewModel(private val repository: NpcRepository) : ViewModel() {
     fun saveNpcAssign(listNpcId: List<Int>, idMapUser: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val listNpcAssign = listNpcId.map { NpcAssignEntity(id = 0, idNpc = it, idMapUser = idMapUser) }
+                val listNpcAssign = listNpcId.map { NpcAssignEntity(idNpc = it, idMapUser = idMapUser) }
                 repository.saveNpcAssign(listNpcAssign)
             } catch (e: Exception) {
                 e.printStackTrace()

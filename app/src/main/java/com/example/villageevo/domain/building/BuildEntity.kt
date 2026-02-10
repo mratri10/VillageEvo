@@ -21,7 +21,8 @@ data class BuildDataEntity(
 
 @Entity("source")
 data class SourceEntity(
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int=0,
     var params: BuildEvoParams  ,
     var value: Int,
 )
