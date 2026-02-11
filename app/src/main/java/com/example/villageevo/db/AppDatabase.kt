@@ -20,7 +20,7 @@ import com.example.villageevo.domain.npc.*
                         NpcEntity::class,
                         NpcAbilityEntity::class,
                         NpcAssignEntity::class],
-        version = 10,
+        version = 11,
         exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -35,12 +35,12 @@ abstract class AppDatabase : RoomDatabase() {
             return INSTANCE
                     ?: synchronized(this) {
                         val instance =
-                                Room.databaseBuilder(
-                                                context.applicationContext,
-                                                AppDatabase::class.java,
-                                                "village_evo_database"
-                                        )
-                                        .fallbackToDestructiveMigration()
+                            Room.databaseBuilder(
+                                context.applicationContext,
+                                AppDatabase::class.java,
+                                "village_evo_database"
+                            )
+                                .fallbackToDestructiveMigration(false)
                                         .build()
                         INSTANCE = instance
                         instance

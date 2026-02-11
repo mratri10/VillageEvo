@@ -5,4 +5,8 @@ enum class BuildingType {
     FARM,
     FOREST,//{14 x 9}
     WILD,
+    MARKET,
+    BUILD,
+    SCHOOL,
+    BARRACK
 }

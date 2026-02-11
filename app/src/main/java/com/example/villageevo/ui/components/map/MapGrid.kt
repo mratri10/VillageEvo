@@ -56,6 +56,10 @@ fun MapGrid(
                 data.worker,
                 data.id
             )
+            BuildingType.HOUSE -> VillageArea(
+                data.value.toInt(),
+                R.drawable.build_house,
+            )
             else ->Text("Unknown")
         }
     }

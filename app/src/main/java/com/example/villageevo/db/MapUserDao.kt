@@ -6,6 +6,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import androidx.room.Upsert
+import com.example.villageevo.domain.building.BuildEvoParams
 import com.example.villageevo.domain.building.SourceEntity
 import com.example.villageevo.domain.map.MapDataEntity
 import com.example.villageevo.domain.map.MapDataWorker
@@ -19,23 +21,36 @@ interface MapUserDao {
     suspend fun insertUserMetadata(metaData: MapMetaDataEntity): Long
     @Insert
     suspend fun insertAllUserData(data: List<MapDataEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMapDataUser(data: MapDataEntity)
     @Insert
     suspend fun insertAllUserResources(data: List<MapResourceEntity>)
 
     @Query("UPDATE source SET value = value + :newValue WHERE params = :name")
-    suspend fun updateResource(name: String, newValue: Int):Int
+    suspend fun updateResource(name: String, newValue: Double):Int
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertResource(source: SourceEntity): Long
+    suspend fun insertSource(source: SourceEntity): Long
     @Update
     suspend fun updateMapUserAllData(data: List<MapDataEntity>)
 
     @Transaction
-    suspend fun runTurnTransaction(sources: List<SourceEntity>, mapUpdates: List<MapDataEntity>) {
+    suspend fun runTurnTransaction(sources: List<SourceEntity>, requiredList:List<SourceEntity>, mapUpdates: List<MapDataEntity>) {
         sources.forEach{
             val rowsUpdated = updateResource(it.params.toString(), it.value)
             if (rowsUpdated == 0) {
-                insertResource(SourceEntity(params = it.params, value = it.value))
+                insertSource(SourceEntity(params = it.params, value = it.value))
             }
+        }
+        requiredList.forEach{
+            val rowsUpdated = updateResource(it.params.toString(), -it.value)
+            if (rowsUpdated == 0) {
+                insertSource(SourceEntity(params = it.params, value = -it.value))
+            }
+        }
+        val rowsUpdated = updateResource(BuildEvoParams.TURN.toString(), 1.0)
+        if (rowsUpdated == 0) {
+            insertSource(SourceEntity(params=BuildEvoParams.TURN, value=1.0))
         }
         updateMapUserAllData(mapUpdates)
     }
@@ -97,5 +112,8 @@ interface MapUserDao {
                                    stoneVal: Int,
                                    goldVal: Int,
                                    ironVal: Int): List<PotentialData>
+
+    @Query("Select * from source")
+    suspend fun getSource(): List<SourceEntity>
 
 }

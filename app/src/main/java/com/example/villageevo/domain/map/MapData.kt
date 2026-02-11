@@ -10,8 +10,8 @@ data class MapMetaData (
 )
 data class PotentialData(
     val name:String,
-    val totalValue:Int,
-    val totalSource:Int,
+    val totalValue: Double,
+    val totalSource:Double,
     val idMap:Int
 )
 

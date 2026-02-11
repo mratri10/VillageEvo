@@ -56,4 +56,9 @@ class NpcRepository(private val npcDao: NpcDao){
         )
     }
 
+    @Transaction
+    suspend fun updateAssignToNol(){
+        npcDao.updateNpcAssignToNol()
+    }
+
 }

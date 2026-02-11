@@ -80,4 +80,15 @@ interface NpcDao {
             filterCalvary: Int,
             filterSpearman: Int,
     ): List<NpcMap>
+
+    @Query("""
+        UPDATE npc_assign SET idMapUser = 0
+        WHERE idMapUser IN (
+            SELECT mud.id
+            FROM map_user_data mud
+            WHERE mud.value = 0
+        )
+    """)
+    suspend fun updateNpcAssignToNol()
+
 }

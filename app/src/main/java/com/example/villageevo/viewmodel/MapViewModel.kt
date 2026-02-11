@@ -33,6 +33,10 @@ class MapViewModel(private val repository: MapUserRepository): ViewModel(){
     private val _getPotential = MutableStateFlow(emptyList<PotentialData>())
     var getPotential = _getPotential.asStateFlow()
 
+    private val _getSource = MutableStateFlow(emptyList<SourceEntity>())
+    var getSource = _getSource.asStateFlow()
+
+
     fun insertUserMap(
         mapMetaUser: MapMetaData,
         mapResourceList: List<MapResourceEntity>,
@@ -40,6 +44,12 @@ class MapViewModel(private val repository: MapUserRepository): ViewModel(){
     ){
         viewModelScope.launch(Dispatchers.IO){
             repository.saveToMapUserResource(mapMetaUser, mapResourceList, mapDataList)
+        }
+    }
+
+    fun saveUserMap(mapDataUser: MapDataEntity, required:List<SourceEntity>){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.saveMapUserData(mapDataUser, required)
         }
     }
     fun dataMapUserById(id: Int) {
@@ -56,6 +66,7 @@ class MapViewModel(private val repository: MapUserRepository): ViewModel(){
                 _getUserResource.value = resource
                 _getUserData.value = data
                 _getPotential.value = potential
+                _getSource.value =repository.getSourceData()
 
                 if (meta != null) {
                     _getUserMeta.value = meta
@@ -69,7 +80,7 @@ class MapViewModel(private val repository: MapUserRepository): ViewModel(){
         }
     }
 
-    fun turnProcess(potentialData: List<PotentialData>, mapData:List<MapDataWorker>){
+    fun turnProcess(potentialData: List<PotentialData>, requiredData:List<SourceEntity>, mapData:List<MapDataWorker>){
         try {
             val potentialMap = potentialData.associateBy { it.idMap }
 
@@ -88,7 +99,7 @@ class MapViewModel(private val repository: MapUserRepository): ViewModel(){
                 val convertAbility = getAbilityConvertValue(worker.name)
 
                 val newValue = if (potential != null && convertAbility > 0) {
-                    val calculatedValue = worker.value - (potential.totalValue.toDouble() / convertAbility)
+                    val calculatedValue = worker.value - (potential.totalValue / convertAbility)
                     maxOf(0.0, calculatedValue)
                 }
                 else {
@@ -98,7 +109,7 @@ class MapViewModel(private val repository: MapUserRepository): ViewModel(){
             }
 
             viewModelScope.launch ( Dispatchers.IO){
-                repository.turnProcess(sourceList, mapDataEntities)
+                repository.turnProcess(sourceList, requiredData, mapDataEntities, )
                 dataMapUserById(getUserMeta.value.id)
             }
 

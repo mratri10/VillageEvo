@@ -26,15 +26,6 @@ data class BuildDataEntity(
 data class SourceEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int=0,
-    var params: BuildEvoParams  ,
-    var value: Int,
+    var params: BuildEvoParams,
+    var value: Double,
 )
-enum class BuildEvoParams{
-    FOOD,
-    WOOD,
-    GOLD,
-    IRON,
-    TURN,
-    POPULATION,
-    STONE
-}

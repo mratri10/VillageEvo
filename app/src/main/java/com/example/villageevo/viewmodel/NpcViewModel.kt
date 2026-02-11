@@ -2,6 +2,7 @@ package com.example.villageevo.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.villageevo.domain.map.MapDataEntity
 import com.example.villageevo.domain.npc.NpcAbilityEntity
 import com.example.villageevo.domain.npc.NpcAssignEntity
 import com.example.villageevo.domain.npc.NpcEntity
@@ -62,6 +63,12 @@ class NpcViewModel(private val repository: NpcRepository) : ViewModel() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
+    }
+
+    fun updateAssignToNol(){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.updateAssignToNol()
         }
     }
 }

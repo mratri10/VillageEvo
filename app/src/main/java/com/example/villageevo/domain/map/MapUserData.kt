@@ -1,6 +1,7 @@
 package com.example.villageevo.domain.map
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity("map_user_metadata")
@@ -10,9 +11,13 @@ data class MapMetaDataEntity(
         var description: String
 )
 
-@Entity("map_user_data")
+@Entity("map_user_data",
+    indices = [
+        Index(value=["idMap", "x", "y"], unique = true)
+    ])
 data class MapDataEntity(
-        @PrimaryKey val id: Int,
+        @PrimaryKey(autoGenerate = true)
+        val id: Int,
         val idMap: Int,
         val name: String,
         val value: Double,

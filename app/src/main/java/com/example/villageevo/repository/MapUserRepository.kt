@@ -2,6 +2,7 @@ package com.example.villageevo.repository
 
 import androidx.room.Transaction
 import com.example.villageevo.db.MapUserDao
+import com.example.villageevo.domain.building.BuildConvert
 import com.example.villageevo.domain.building.BuildEvoParams
 import com.example.villageevo.domain.building.SourceEntity
 import com.example.villageevo.domain.map.MapDataEntity
@@ -54,11 +55,22 @@ class MapUserRepository(
     }
 
     @Transaction
-    suspend fun turnProcess(sources: List<SourceEntity>, maps: List<MapDataEntity>){
-        mapUserDao.insertAllSource(listOf(
-            SourceEntity(id = 0, params = BuildEvoParams.TURN, value = 1)
-        ))
-        mapUserDao.runTurnTransaction(sources, maps)
+    suspend fun saveMapUserData(mapDataUser: MapDataEntity, required:List<SourceEntity>){
+        mapUserDao.insertMapDataUser(mapDataUser)
+        required.forEach{
+            val rowsUpdated = mapUserDao.updateResource(it.params.toString(), it.value)
+            if (rowsUpdated == 0) {
+                mapUserDao.insertSource(SourceEntity(params = it.params, value = it.value))
+            }
+        }
+    }
+    @Transaction
+    suspend fun insertSourceData(params: BuildEvoParams, value: Double){
+        mapUserDao.insertSource(SourceEntity(params=params, value=value))
+    }
+    @Transaction
+    suspend fun turnProcess(sources: List<SourceEntity>, requiredList: List<SourceEntity>, maps: List<MapDataEntity>){
+        mapUserDao.runTurnTransaction(sources, requiredList, maps)
     }
     suspend fun getMapUserResource(idMap:Int): List<MapResourceEntity>{
         return mapUserDao.getUserResource(idMap)
@@ -76,5 +88,9 @@ class MapUserRepository(
             goldVal = AbilitySource.gold.convert,
             ironVal = AbilitySource.iron.convert
         )
+    }
+
+    suspend fun getSourceData():List<SourceEntity>{
+        return mapUserDao.getSource()
     }
 }
